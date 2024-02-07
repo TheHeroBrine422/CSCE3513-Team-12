@@ -1,7 +1,9 @@
 # This is just a workspace for caleb to mess around with udp in python
 # generally i am just trying to write some rough pseudoish code for what the networking should look like in the final product.
+# none of this has actually been tested yet and will be done in the future.
 # py udp tutorial: https://www.binarytides.com/programming-udp-sockets-in-python/
 # socket documentation: https://docs.python.org/3/library/socket.html
+# socket broadcast tutorial: https://en.ittrip.xyz/python/python-udp-broadcast
 
 import socket
 
@@ -9,6 +11,7 @@ BROADCAST_PORT = 7500
 RECV_PORT = 7501
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 s.bind(("", RECV_PORT))
 
 def send_broadcast(msg):
