@@ -19,10 +19,10 @@ def send_broadcast(msg):
 
 gameEndCount = 0
 
-gameState = "starting"
+gameState = "starting" # this variable isnt actually properly updated
 
 while True:
-    data, addr = s.recvfrom(1024)
+    data, addr = s.recvfrom(1024) # check how this function actually returns data, cause it might be a problem depending on how it works.
     if gameState == "starting":
         send_broadcast("202")
         gameEndCount = 0
@@ -35,7 +35,7 @@ while True:
         data = data.split(":")
         sendingEquipID = data[0]
         hitEquipID = data[1]
-        if sendingEquipID.team == hitEquipID.team:
+        if sendingEquipID.team == hitEquipID.team: # todo figure out actually where team data 
             send_broadcast(sendingEquipID)
         else:
              send_broadcast(hitEquipID)
