@@ -15,7 +15,7 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 s.bind(("", RECV_PORT))
 
 def send_broadcast(msg):
-	s.sendto(msg, ("255.255.255.255", BROADCAST_PORT))
+	s.sendto(msg, ("192.168.1.255", BROADCAST_PORT))
 
 gameEndCount = 0
 
@@ -31,11 +31,13 @@ while True:
         send_broadcast("221")
         gameEndCount += 1
     else:
-        # still need to deal with red and blue team bases. not entirely sure how their data will look like.
         data = data.split(":")
         sendingEquipID = data[0]
         hitEquipID = data[1]
-        if sendingEquipID.team == hitEquipID.team: # todo figure out actually where team data 
+        if hitEquipID == "53" or hitEquipID == "43":
+            pass
+            # deal with bases
+        elif sendingEquipID.team == hitEquipID.team: # todo figure out actually where team data will be located and grab it from there.
             send_broadcast(sendingEquipID)
         else:
-             send_broadcast(hitEquipID)
+            send_broadcast(hitEquipID)
