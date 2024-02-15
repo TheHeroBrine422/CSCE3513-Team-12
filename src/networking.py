@@ -1,14 +1,9 @@
-# This is just a workspace for caleb to mess around with udp in python
-# generally i am just trying to write some rough pseudoish code for what the networking should look like in the final product.
-# none of this has actually been tested yet and will be done in the future.
 # py udp tutorial: https://www.binarytides.com/programming-udp-sockets-in-python/
 # socket documentation: https://docs.python.org/3/library/socket.html
 # socket broadcast tutorial: https://en.ittrip.xyz/python/python-udp-broadcast
 # strother's udp: https://github.com/jstrother123/photon-main/tree/main/udp_files
 
 import socket
-
-import time
 
 class NetworkingManager():
     BROADCAST_PORT = 7500
