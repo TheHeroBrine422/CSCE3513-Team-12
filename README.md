@@ -8,3 +8,8 @@ Team 12's CSCE3513 Software Engineering Project with Jim Strother
 |Laney Pennington||[Laney](https://github.com/ljpenn9)|
 |Matthew Butler||[Cannonbowl](https://github.com/CannonBowl)|
 |Samuel Brooks|sfbrooks@uark.edu|[Samuel Brooks](https://github.com/SamForrestB)|
+
+### Usage:
+
+1. Install dependencies with `pip install -r src/requirements.txt`
+2. Run the application with `python3 src/main.py`
