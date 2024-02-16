@@ -27,7 +27,7 @@ class NetworkingManager():
         if self.gameState["stage"] == "starting":
             self.send_broadcast("202")
             self.gameEndCount = 0
-        elif gameState["stage"] == "finished" and self.gameEndCount < 3:
+        elif self.gameState["stage"] == "finished" and self.gameEndCount < 3:
             self.send_broadcast("221")
             self.gameEndCount += 1
         else:
