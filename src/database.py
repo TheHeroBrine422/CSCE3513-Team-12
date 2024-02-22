@@ -15,6 +15,28 @@ class DatabaseManager():
         # Testing whether the connection works
         response = self.supabase.table('Players').select("*").execute()
         return response.data
+    
+    def addPlayer(self, id, codename):
+        # Check to see if the player already exists
+        existing_player, error = self.supabase.table('Players').select('id', id).execute()
+        if error:
+            print(f"Error: {error}")
+        elif existing_player:
+            print(f"Player already exists: {existing_player}")
+        else:
+            data, error = self.supabase.table('Players').insert([{'id': id, 'codename': codename}]).execute()
+            if error:
+                print(f"Error: {error}")
+            else:
+                print(f"Player {id} - {codename} added successfully")
+                
+    def clearTable(self):
+        data, error = self.supabase.table('Players').delete().execute()
+        if error:
+            print(f"Error: {error}")
+        else:
+            print(f"Table cleared successfully")
+        
 
     
 if __name__ == "__main__":
