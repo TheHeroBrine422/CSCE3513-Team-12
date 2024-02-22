@@ -18,5 +18,5 @@ class SplashScreen(tk.Frame):
         # Place Label in frame's grid
         logo_label.grid()
 
-        # switch to PlayerEntry screen after 5 seconds
-        parent.after(5000, controller.show_frame, "PlayerEntry")
+        # switch to EntryScreen frame after 5 seconds
+        parent.after(5000, controller.show_frame, "EntryScreen")

@@ -1,94 +1,85 @@
 import tkinter as tk
 
-def on_button_click(button_number):
-    print(f"Button {button_number} clicked!")
+class EntryScreen(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="#222222")
 
-# Function to handle changes in the Entry widgets
-def on_entry_change(event, row, col, entry):
-    value = entry.get()
-    print(f"Value in row {row}, column {col} changed to: {value}")
+        # Create a header label
+        header_label = tk.Label(self, text="Edit Current Game", font=("Helvetica", 16))
+        header_label.pack(side=tk.TOP, pady=10)
 
-# Create the main window
-root = tk.Tk()
-root.title("Player Entry Screen")
+        # Create 8 buttons
+        buttons_frame = tk.Frame(self, bg="#222222")
+        buttons_frame.pack(side=tk.BOTTOM, pady=10)
 
-# Set minimum window size
-root.minsize(1280, 720)
+        buttons = []
+        for i in range(1, 9):
+            button = tk.Button(buttons_frame, text=f"Button {i}", command=lambda i=i: self.on_button_click(i))
+            button.pack(side=tk.LEFT, padx=5, pady=5, fill=tk.X, expand=True)
+            buttons.append(button)
 
-# Set the background color to dark grey
-root.configure(bg="#222222")
+        # Create frames for the Red and Green Teams, encapsulate them in another frame
+        teams_frame = tk.Frame(self, bg="#222222")
+        teams_frame.pack(side=tk.TOP)
 
-# Create a header label
-header_label = tk.Label(root, text="Edit Current Game", font=("Helvetica", 16))
-header_label.pack(side=tk.TOP, pady=10)
+        red_team_frame = tk.Frame(teams_frame, bd=2, relief=tk.GROOVE, bg="red")
+        red_team_frame.pack(side=tk.LEFT, padx=10, pady=5, anchor="n")
 
-# Create 8 buttons
-buttons_frame = tk.Frame(root, bg="#222222")
-buttons_frame.pack(side=tk.BOTTOM, pady=10)
+        green_team_frame = tk.Frame(teams_frame, bd=2, relief=tk.GROOVE, bg="green")
+        green_team_frame.pack(side=tk.LEFT, padx=10, pady=5, anchor="n")
 
-buttons = []
-for i in range(1, 9):
-    button = tk.Button(buttons_frame, text=f"Button {i}", command=lambda i=i: on_button_click(i))
-    button.pack(side=tk.LEFT, padx=5, pady=5, fill=tk.X, expand=True)
-    buttons.append(button)
+        # Create labels for the Red and Green Teams
+        red_team_label = tk.Label(red_team_frame, text="Red Team", font=("Helvetica", 14), bg="red")
+        red_team_label.pack()
 
-# Create frames for the Red and Green Teams, encapsulate them in another frame
-teams_frame = tk.Frame(root, bg="#222222")
-teams_frame.pack(side=tk.TOP)
+        green_team_label = tk.Label(green_team_frame, text="Green Team", font=("Helvetica", 14), bg="green")
+        green_team_label.pack()
 
-red_team_frame = tk.Frame(teams_frame, bd=2, relief=tk.GROOVE, bg="red")
-red_team_frame.pack(side=tk.LEFT, padx=10, pady=5, anchor="n")
+        # Create frames for the tables of the Red and Green Teams
+        red_table_frame = tk.Frame(red_team_frame, bg="red")
+        red_table_frame.pack()
 
-green_team_frame = tk.Frame(teams_frame, bd=2, relief=tk.GROOVE, bg="green")
-green_team_frame.pack(side=tk.LEFT, padx=10, pady=5, anchor="n")
+        green_table_frame = tk.Frame(green_team_frame, bg="green")
+        green_table_frame.pack()
 
-# Create labels for the Red and Green Teams
-red_team_label = tk.Label(red_team_frame, text="Red Team", font=("Helvetica", 14), bg="red")
-red_team_label.pack()
+        # Create 15x2 tables with Entry widgets and row numbers for the Red Team
+        entries_red = []
+        for i in range(15):
+            row_label = tk.Label(red_table_frame, text=f"{i + 1}.", width=3, anchor="w", bg="red")
+            row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
-green_team_label = tk.Label(green_team_frame, text="Green Team", font=("Helvetica", 14), bg="green")
-green_team_label.pack()
+            row_entries = []
+            for j in range(1, 3):
+                entry = tk.Entry(red_table_frame, width=20)
+                entry.grid(row=i, column=j, padx=5, pady=5)
+                entry.bind("<FocusOut>", lambda event, row=i, col=j, entry=entry: self.on_entry_change(event, row, col, entry))
+                row_entries.append(entry)
+            entries_red.append(row_entries)
 
-# Create frames for the tables of the Red and Green Teams
-red_table_frame = tk.Frame(red_team_frame, bg="red")
-red_table_frame.pack()
+        # Center the Red Team table
+        red_table_frame.pack(side=tk.TOP, pady=5)
 
-green_table_frame = tk.Frame(green_team_frame, bg="green")
-green_table_frame.pack()
+        # Create 15x2 tables with Entry widgets and row numbers for the Green Team
+        entries_green = []
+        for i in range(15):
+            row_label = tk.Label(green_table_frame, text=f"{i + 1}.", width=3, anchor="w", bg="green")
+            row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
-# Create 15x2 tables with Entry widgets and row numbers for the Red Team
-entries_red = []
-for i in range(15):
-    row_label = tk.Label(red_table_frame, text=f"{i + 1}.", width=3, anchor="w", bg="red")
-    row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
+            row_entries = []
+            for j in range(1, 3):
+                entry = tk.Entry(green_table_frame, width=20)
+                entry.grid(row=i, column=j, padx=5, pady=5)
+                entry.bind("<FocusOut>", lambda event, row=i, col=j, entry=entry: self.on_entry_change(event, row, col, entry))
+                row_entries.append(entry)
+            entries_green.append(row_entries)
 
-    row_entries = []
-    for j in range(1, 3):
-        entry = tk.Entry(red_table_frame, width=20)
-        entry.grid(row=i, column=j, padx=5, pady=5)
-        entry.bind("<FocusOut>", lambda event, row=i, col=j, entry=entry: on_entry_change(event, row, col, entry))
-        row_entries.append(entry)
-    entries_red.append(row_entries)
+        # Center the Green Team table
+        green_table_frame.pack(side=tk.TOP, pady=5)
 
-# Center the Red Team table
-red_table_frame.pack(side=tk.TOP, pady=5)
+    def on_button_click(self, button_number):
+        print(f"Button {button_number} clicked!")
 
-# Create 15x2 tables with Entry widgets and row numbers for the Green Team
-entries_green = []
-for i in range(15):
-    row_label = tk.Label(green_table_frame, text=f"{i + 1}.", width=3, anchor="w", bg="green")
-    row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
-
-    row_entries = []
-    for j in range(1, 3):
-        entry = tk.Entry(green_table_frame, width=20)
-        entry.grid(row=i, column=j, padx=5, pady=5)
-        entry.bind("<FocusOut>", lambda event, row=i, col=j, entry=entry: on_entry_change(event, row, col, entry))
-        row_entries.append(entry)
-    entries_green.append(row_entries)
-
-# Center the Green Team table
-green_table_frame.pack(side=tk.TOP, pady=5)
-
-# Start the Tkinter event loop
-root.mainloop()
+    # Function to handle changes in the Entry widgets
+    def on_entry_change(self, event, row, col, entry):
+        value = entry.get()
+        print(f"Value in row {row}, column {col} changed to: {value}")

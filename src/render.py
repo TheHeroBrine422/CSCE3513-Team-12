@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 import SplashScreen
+import EntryScreen
 
 class RenderingManager(tk.Tk):
     def __init__(self, gameState, *args, **kwargs):
@@ -31,9 +32,9 @@ class RenderingManager(tk.Tk):
         self.frames["SplashScreen"] = SplashScreen.SplashScreen(container, self)
         self.frames["SplashScreen"].grid(row=0, column=0, sticky="nsew")
 
-        #Enter PlayerEntry into frames dictionary
-        self.frames["PlayerEntry"] = PlayerEntry(container, self)
-        self.frames["PlayerEntry"].grid(row=0, column=0, sticky="nsew")
+        #Enter EntryScreen into frames dictionary
+        self.frames["EntryScreen"] = EntryScreen.EntryScreen(container, self)
+        self.frames["EntryScreen"].grid(row=0, column=0, sticky="nsew")
 
         # Set first frame
         self.show_frame("SplashScreen")
@@ -47,16 +48,3 @@ class RenderingManager(tk.Tk):
     def tick(self):
         # do actual rendering here.
         self.update()
-        pass
-
-
-class PlayerEntry(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-
-        # Create grid
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-
-        label = tk.Label(self, text="Player Entry")
-        label.grid()
