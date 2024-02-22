@@ -19,4 +19,4 @@ class SplashScreen(tk.Frame):
         logo_label.grid()
 
         # switch to EntryScreen frame after 5 seconds
-        parent.after(5000, controller.show_frame, "EntryScreen")
+        parent.after(3000, controller.show_frame, "EntryScreen")
