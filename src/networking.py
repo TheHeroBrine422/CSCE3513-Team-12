@@ -47,6 +47,8 @@ class NetworkingManager():
                     self.send_broadcast(sendingEquipID)
                 else:
                     self.send_broadcast(hitEquipID)
-            except BlockingIOError:
+            except BlockingIOError: # this occurs when s.recvfrom tries to get data and cant find any data. this isn't a error to be worried about because that just means none of the laser tag units sent any data to the server.
+                pass
+            except ConnectionResetError: # this means that there was no server it could connect to which is fine, just means none of the laser tag units are on.
                 pass
 
