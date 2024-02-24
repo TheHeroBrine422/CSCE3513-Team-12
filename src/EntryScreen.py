@@ -21,10 +21,24 @@ class EntryScreen(tk.Frame):
         buttons_frame.pack(side=tk.BOTTOM, pady=10)
 
         buttons = []
-        for i in range(1, 9):
-            button = tk.Button(buttons_frame, text=f"Button {i}", command=lambda i=i: self.on_button_click(i))
+        labels = [
+            "Edit Game",
+            "Game Parameters",
+            "Start Game",
+            "PreEntered Games",
+            "",
+            "View Game",
+            "Flick Sync",
+            "Clear Game"
+        ]
+        for i, label in enumerate(labels, start=1):
+            # Use function key labels (F1, F2, ..., F8) along with the specified labels
+            button = tk.Button(buttons_frame, text=f"F{i}\n{label}", command=lambda i=i: self.on_button_click(i))
             button.pack(side=tk.LEFT, padx=5, pady=5, fill=tk.X, expand=True)
             buttons.append(button)
+
+        # Bind all key events globally
+        self.master.bind_all("<KeyPress>", self.on_key_press)
 
         # Create frames for the Red and Green Teams, encapsulate them in another frame
         teams_frame = tk.Frame(self, bg=GRAY)
@@ -37,10 +51,10 @@ class EntryScreen(tk.Frame):
         green_team_frame.pack(side=tk.LEFT, padx=10, pady=5, anchor="n")
 
         # Create labels for the Red and Green Teams
-        red_team_label = tk.Label(red_team_frame, text="RED TEAM", font=("Helvetica", 16), bg=RED)
+        red_team_label = tk.Label(red_team_frame, text="RED TEAM", font=("Helvetica", 16), bg=RED, fg=WHITE)
         red_team_label.pack()
 
-        green_team_label = tk.Label(green_team_frame, text="GREEN TEAM", font=("Helvetica", 16), bg=GREEN)
+        green_team_label = tk.Label(green_team_frame, text="GREEN TEAM", font=("Helvetica", 16), bg=GREEN, fg=WHITE)
         green_team_label.pack()
 
         # Create frames for the tables of the Red and Green Teams
@@ -53,7 +67,7 @@ class EntryScreen(tk.Frame):
         # Create 15x2 tables with Entry widgets and row numbers for the Red Team
         entries_red = []
         for i in range(15):
-            row_label = tk.Label(red_table_frame, text=f"{i + 1}.", width=3, anchor="w", bg=RED)
+            row_label = tk.Label(red_table_frame, text=f"{i + 1}.", width=3, anchor="w", bg=RED, fg=WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
             row_entries = []
@@ -70,7 +84,7 @@ class EntryScreen(tk.Frame):
         # Create 15x2 tables with Entry widgets and row numbers for the Green Team
         entries_green = []
         for i in range(15):
-            row_label = tk.Label(green_table_frame, text=f"{i + 1}.", width=3, anchor="w", bg=GREEN)
+            row_label = tk.Label(green_table_frame, text=f"{i + 1}.", width=3, anchor="w", bg=GREEN, fg=WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
             row_entries = []
@@ -86,6 +100,12 @@ class EntryScreen(tk.Frame):
 
     def on_button_click(self, button_number):
         print(f"Button {button_number} clicked!")
+
+    def on_key_press(self, event):
+        # Check if the pressed key is a function key (F1, F2, ..., F8)
+        if event.keysym.startswith("F") and event.keysym[1:].isdigit():
+            button_number = int(event.keysym[1:])
+            self.on_button_click(button_number)
 
     # Function to handle changes in the Entry widgets
     def on_entry_change(self, event, row, col, entry):
