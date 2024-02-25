@@ -6,7 +6,7 @@ gameState = {"running": True, "stage": "starting"} # global stuff like what play
 
 databaseManager = DatabaseManager(gameState)
 networkingManager = NetworkingManager(gameState)
-renderingManager = RenderingManager(gameState)
+renderingManager = RenderingManager(gameState, networkingManager, databaseManager)
 
 while gameState["running"]:
     networkingManager.tick()

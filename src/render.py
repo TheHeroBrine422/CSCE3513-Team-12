@@ -4,11 +4,11 @@ import SplashScreen
 import EntryScreen
 
 class RenderingManager(tk.Tk):
-    def __init__(self, gameState, *args, **kwargs):
+    def __init__(self, gameState, networkingManager, databaseManager, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.gameState = gameState
-        #self.networkingManager = networkingManager
-        #self.databaseManager = databaseManager
+        self.networkingManager = networkingManager
+        self.databaseManager = databaseManager
         self.title("Proton Laser Tag")
         global SCREEN_HEIGHT
         global SCREEN_WIDTH

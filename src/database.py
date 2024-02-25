@@ -15,17 +15,24 @@ class DatabaseManager():
         # Testing whether the connection works
         response = self.supabase.table('Players').select("*").execute()
         return response.data
+
+    def getPlayer(self, id):
+        existing_player, error = self.supabase.table('Players').select('*').eq('id', id).execute()
+        if error:
+            print(f"Error: {error}")
+            return None
+        return existing_player.data.codename
     
     def addPlayer(self, id, codename):
         # Check to see if the player already exists
-        existing_player, error = self.supabase.table('Players').select('id', id).execute()
-        if error:
+        existing_player, error = self.supabase.table('Players').select('*').eq('id', id).execute()
+        if error and not (error[0] == 'count' and error[1] is None):
             print(f"Error: {error}")
-        elif existing_player:
+        elif len(existing_player[1]) > 0:
             print(f"Player already exists: {existing_player}")
         else:
-            data, error = self.supabase.table('Players').insert([{'id': id, 'codename': codename}]).execute()
-            if error:
+            data, error2 = self.supabase.table('Players').insert([{'id': id, 'codename': codename}]).execute()
+            if error2:
                 print(f"Error: {error}")
             else:
                 print(f"Player {id} - {codename} added successfully")
