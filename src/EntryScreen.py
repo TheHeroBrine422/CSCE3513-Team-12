@@ -83,9 +83,9 @@ class EntryScreen(tk.Frame):
         column2_label_red = tk.Label(self.red_table_frame, text="Equipment ID", width=11, anchor="w", bg=self.RED, fg=self.WHITE)
         column2_label_red.grid(row=0, column=3, padx=(5, 0), pady=5)
 
-        entries_red = []
+        self.entries_red = []
         for i in range(1, 16):
-            row_label = tk.Label(self.red_table_frame, text=f"{i + 1}.", width=3, anchor="w", bg=self.RED, fg=self.WHITE)
+            row_label = tk.Label(self.red_table_frame, text=f"{i}.", width=3, anchor="w", bg=self.RED, fg=self.WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
             row_entries = []
@@ -94,7 +94,7 @@ class EntryScreen(tk.Frame):
                 entry.grid(row=i, column=j, padx=5, pady=5)
                 entry.bind("<FocusOut>", lambda event, row=i, col=j, entry=entry: self.on_entry_change(event, row, col, entry, 'red'))
                 row_entries.append(entry)
-            entries_red.append(row_entries)
+            self.entries_red.append(row_entries)
 
         # Center the Red Team table
         self.red_table_frame.pack(side=tk.TOP, pady=5)
@@ -109,9 +109,9 @@ class EntryScreen(tk.Frame):
         column3_label_green.grid(row=0, column=3, padx=(5, 0), pady=5)
 
         # Create 15x2 tables with Entry widgets and row numbers for the Green Team
-        entries_green = []
+        self.entries_green = []
         for i in range(1, 16):
-            row_label = tk.Label(self.green_table_frame, text=f"{i + 1}.", width=3, anchor="w", bg=self.GREEN, fg=self.WHITE)
+            row_label = tk.Label(self.green_table_frame, text=f"{i}.", width=3, anchor="w", bg=self.GREEN, fg=self.WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
             row_entries = []
@@ -120,7 +120,7 @@ class EntryScreen(tk.Frame):
                 entry.grid(row=i, column=j, padx=5, pady=5)
                 entry.bind("<FocusOut>", lambda event, row=i, col=j, entry=entry: self.on_entry_change(event, row, col, entry, 'green'))
                 row_entries.append(entry)
-            entries_green.append(row_entries)
+            self.entries_green.append(row_entries)
 
         # Center the Green Team table
         self.green_table_frame.pack(side=tk.TOP, pady=5)
@@ -147,14 +147,12 @@ class EntryScreen(tk.Frame):
                 self.red_team[row-1]["uniqueID"] = value
                 if codename is not None:
                     self.red_team[row - 1]["codename"] = codename
-                    codenameLabel = tk.Label(self.red_table_frame, text=codename, width=20, anchor="w", bg=self.RED, fg=self.WHITE)
-                    codenameLabel.grid(row=row, column=2, padx=(5, 0), pady=5)
+                    self.entries_red[row-1][col].insert(0, codename)
             if team == 'green':
                 self.green_team[row - 1]["uniqueID"] = value
                 if codename is not None:
                     self.red_team[row - 1]["codename"] = codename
-                    codenameLabel = tk.Label(self.green_table_frame, text=codename, width=20, anchor="w", bg=self.GREEN, fg=self.WHITE)
-                    codenameLabel.grid(row=row, column=2, padx=(5, 0), pady=5)
+                    self.entries_green[row-1][col].insert(0, codename)
         elif col == 2:
             self.tempUniqueID = "" # dealing with weird local variable issue.
             if team == 'red':
