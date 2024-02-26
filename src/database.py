@@ -21,8 +21,8 @@ class DatabaseManager():
         if error and not (error[0] == 'count' and error[1] is None):
             print(f"Error: {error}")
             return None
-        if existing_player:
-            return existing_player[0]['codename']
+        if len(existing_player[1]) > 0:
+            return existing_player[1][0]['codename']
         else:
             print("Player not found")
             return None

@@ -143,16 +143,17 @@ class EntryScreen(tk.Frame):
 
         if col == 1:
             codename = self.controller.databaseManager.getPlayer(value)
+            self.red_team[row - 1]["uniqueID"] = codename
             if team == 'red':
                 self.red_team[row-1]["uniqueID"] = value
                 if codename is not None:
                     codenameLabel = tk.Label(self.red_table_frame, text=codename, width=20, anchor="w", bg=self.RED, fg=self.WHITE)
-                    codenameLabel.grid(row=row, column=col, padx=(5, 0), pady=5)
+                    codenameLabel.grid(row=row, column=2, padx=(5, 0), pady=5)
             if team == 'green':
                 self.red_team[row - 1]["uniqueID"] = value
                 if codename is not None:
                     codenameLabel = tk.Label(self.green_team_frame, text=codename, width=20, anchor="w", bg=self.GREEN, fg=self.WHITE)
-                    codenameLabel.grid(row=row, column=col, padx=(5, 0), pady=5)
+                    codenameLabel.grid(row=row, column=2, padx=(5, 0), pady=5)
         elif col == 2:
             self.tempUniqueID = "" # dealing with weird local variable issue.
             if team == 'red':
