@@ -21,7 +21,11 @@ class DatabaseManager():
         if error:
             print(f"Error: {error}")
             return None
-        return existing_player.data.codename
+        if existing_player:
+            return existing_player[0]['codename']
+        else:
+            print("Player not found")
+            return None
     
     def addPlayer(self, id, codename):
         # Check to see if the player already exists
