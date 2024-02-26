@@ -18,7 +18,7 @@ class DatabaseManager():
 
     def getPlayer(self, id):
         existing_player, error = self.supabase.table('Players').select('*').eq('id', id).execute()
-        if error:
+        if error and not (error[0] == 'count' and error[1] is None):
             print(f"Error: {error}")
             return None
         if existing_player:
