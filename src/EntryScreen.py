@@ -14,7 +14,7 @@ class EntryScreen(tk.Frame):
 
         self.red_team = [] # todo: this data should *probably* be part of the gameState variable which is passed from main to render, but not to this class, for now im just doing it like this though.
         self.green_team = []
-        for _ in range(15):
+        for _ in range(20):
             self.red_team.append({"uniqueID": -1, "codename": "", "equipmentID": -1})
             self.green_team.append({"uniqueID": -1, "codename": "", "equipmentID": -1})
 
@@ -74,24 +74,24 @@ class EntryScreen(tk.Frame):
         self.green_table_frame.pack()
 
         # Create 15x2 tables with Entry widgets and row numbers for the Red Team
-        column1_label_red = tk.Label(self.red_table_frame, text="Unique ID", width=8, anchor="w", bg=self.RED, fg=self.WHITE)
+        column1_label_red = tk.Label(self.red_table_frame, text="Unique ID", font=("Helvetica", 15), width=8, anchor="w", bg=self.RED, fg=self.WHITE)
         column1_label_red.grid(row=0, column=1, padx=(5, 0), pady=5)
 
-        column2_label_red = tk.Label(self.red_table_frame, text="Codename", width=8, anchor="w", bg=self.RED, fg=self.WHITE)
+        column2_label_red = tk.Label(self.red_table_frame, text="Codename", font=("Helvetica", 15), width=8, anchor="w", bg=self.RED, fg=self.WHITE)
         column2_label_red.grid(row=0, column=2, padx=(5, 0), pady=5)
 
-        column2_label_red = tk.Label(self.red_table_frame, text="Equipment ID", width=11, anchor="w", bg=self.RED, fg=self.WHITE)
+        column2_label_red = tk.Label(self.red_table_frame, text="Equipment ID", font=("Helvetica", 15), width=11, anchor="w", bg=self.RED, fg=self.WHITE)
         column2_label_red.grid(row=0, column=3, padx=(5, 0), pady=5)
 
         self.entries_red = []
-        for i in range(1, 16):
-            row_label = tk.Label(self.red_table_frame, text=f"{i}.", width=3, anchor="w", bg=self.RED, fg=self.WHITE)
+        for i in range(1, 21):
+            row_label = tk.Label(self.red_table_frame, text=f"{i}.", font = ("Helvetica", 15), width=3, anchor="w", bg=self.RED, fg=self.WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
             row_entries = []
             for j in range(1, 4):
-                entry = tk.Entry(self.red_table_frame, width=20, bg=self.WHITE, fg="black")
-                entry.grid(row=i, column=j, padx=5, pady=5)
+                entry = tk.Entry(self.red_table_frame, font=("Helvetica", 15), width=20, bg=self.WHITE, fg="black")
+                entry.grid(row=i, column=j, padx=5, pady=3)
                 entry.bind("<FocusOut>", lambda event, row=i, col=j, entry=entry: self.on_entry_change(event, row, col, entry, 'red'))
                 row_entries.append(entry)
             self.entries_red.append(row_entries)
@@ -99,25 +99,25 @@ class EntryScreen(tk.Frame):
         # Center the Red Team table
         self.red_table_frame.pack(side=tk.TOP, pady=5)
 
-        column1_label_green = tk.Label(self.green_table_frame, text="Unique ID", width=8, anchor="w", bg=self.GREEN, fg=self.WHITE)
+        column1_label_green = tk.Label(self.green_table_frame, text="Unique ID", font=("Helvetica", 15), width=8, anchor="w", bg=self.GREEN, fg=self.WHITE)
         column1_label_green.grid(row=0, column=1, padx=(5, 0), pady=5)
 
-        column2_label_green = tk.Label(self.green_table_frame, text="Codename", width=8, anchor="w", bg=self.GREEN, fg=self.WHITE)
+        column2_label_green = tk.Label(self.green_table_frame, text="Codename", font=("Helvetica", 15), width=8, anchor="w", bg=self.GREEN, fg=self.WHITE)
         column2_label_green.grid(row=0, column=2, padx=(5, 0), pady=5)
 
-        column3_label_green = tk.Label(self.green_table_frame, text="Equipment ID", width=11, anchor="w", bg=self.GREEN, fg=self.WHITE)
+        column3_label_green = tk.Label(self.green_table_frame, text="Equipment ID", font=("Helvetica", 15), width=11, anchor="w", bg=self.GREEN, fg=self.WHITE)
         column3_label_green.grid(row=0, column=3, padx=(5, 0), pady=5)
 
         # Create 15x2 tables with Entry widgets and row numbers for the Green Team
         self.entries_green = []
-        for i in range(1, 16):
-            row_label = tk.Label(self.green_table_frame, text=f"{i}.", width=3, anchor="w", bg=self.GREEN, fg=self.WHITE)
+        for i in range(1, 21):
+            row_label = tk.Label(self.green_table_frame, text=f"{i}.", font = ("Helvetica", 15), width=3, anchor="w", bg=self.GREEN, fg=self.WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
             row_entries = []
             for j in range(1, 4):
-                entry = tk.Entry(self.green_table_frame, width=20, bg=self.WHITE, fg="black")
-                entry.grid(row=i, column=j, padx=5, pady=5)
+                entry = tk.Entry(self.green_table_frame, font=("Helvetica", 15), width=20, bg=self.WHITE, fg="black")
+                entry.grid(row=i, column=j, padx=5, pady=3)
                 entry.bind("<FocusOut>", lambda event, row=i, col=j, entry=entry: self.on_entry_change(event, row, col, entry, 'green'))
                 row_entries.append(entry)
             self.entries_green.append(row_entries)
@@ -125,8 +125,10 @@ class EntryScreen(tk.Frame):
         # Center the Green Team table
         self.green_table_frame.pack(side=tk.TOP, pady=5)
 
+
     def on_button_click(self, button_number):
         print(f"Button {button_number} clicked!")
+
 
     def on_key_press(self, event):
         # Check if the pressed key is a function key (F1, F2, ..., F8)
@@ -134,12 +136,12 @@ class EntryScreen(tk.Frame):
             button_number = int(event.keysym[1:])
             self.on_button_click(button_number)
 
+
     # Function to handle changes in the Entry widgets
     def on_entry_change(self, event, row, col, entry, team):
         value = entry.get().strip()
         if value == "":
             return
-
 
         if col == 1:
             codename = self.controller.databaseManager.getPlayer(value)
@@ -170,3 +172,4 @@ class EntryScreen(tk.Frame):
             self.controller.networkingManager.send_broadcast(value)
 
         print(f"Value in row {row}, column {col} changed to: {value}")
+        
