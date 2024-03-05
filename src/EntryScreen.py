@@ -49,6 +49,7 @@ class EntryScreen(tk.Frame):
 
         # Bind all key events globally
         self.master.bind_all("<KeyPress>", self.on_key_press)
+        buttons[7].config(command=self.clear_entries)
 
         # Create frames for the Red and Green Teams, encapsulate them in another frame
         teams_frame = tk.Frame(self, bg=self.GRAY)
@@ -185,3 +186,22 @@ class EntryScreen(tk.Frame):
     # go through green table and return a list of Player objects
     def export_green_players(self):
         return [Player.Player("Bob", 20), Player.Player("Mark", 5), Player.Player("Katie", 2)]
+    
+
+    def clear_entries(self):
+        for i in range(20):
+            for j in range(1, 4):
+                # Clears the entry table
+                self.entries_red[i][j-1].delete(0, tk.END)
+                self.entries_green[i][j-1].delete(0, tk.END)
+
+                # Sets red and green team values back to default
+                if j == 1:
+                    self.red_team[i]["uniqueID"] = -1  
+                    self.green_team[i]["uniqueID"] = -1
+                elif j == 2:
+                    self.red_team[i]["codename"] = ""
+                    self.green_team[i]["codename"] = ""
+                elif j == 3:
+                    self.red_team[i]["equipmentID"] = -1
+                    self.green_team[i]["equipmentID"] = -1
