@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import *
 import SplashScreen
 import EntryScreen
+import GameplayScreen
 
 class RenderingManager(tk.Tk):
     def __init__(self, gameState, networkingManager, databaseManager, *args, **kwargs):
@@ -36,6 +37,10 @@ class RenderingManager(tk.Tk):
         self.frames["EntryScreen"] = EntryScreen.EntryScreen(container, self)
         self.frames["EntryScreen"].grid(row=0, column=0, sticky="nsew")
 
+        #Enter GameplayScreen into frames dictionary
+        self.frames["GameplayScreen"] = GameplayScreen.GameplayScreen(container, self)
+        self.frames["GameplayScreen"].grid(row=0, column=0, sticky="nsew")
+
         # Set first frame
         self.show_frame("SplashScreen")
 
@@ -44,6 +49,9 @@ class RenderingManager(tk.Tk):
         frame = self.frames[cont]
         # raises the current frame to the top
         frame.tkraise()
+
+    def get_frame(self, name):
+        return self.frames[name]
 
     def tick(self):
         # do actual rendering here.

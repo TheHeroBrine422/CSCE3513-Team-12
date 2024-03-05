@@ -1,4 +1,5 @@
 import tkinter as tk
+import Player
 
 class EntryScreen(tk.Frame):
     def __init__(self, parent, controller):
@@ -127,6 +128,10 @@ class EntryScreen(tk.Frame):
 
     def on_button_click(self, button_number):
         print(f"Button {button_number} clicked!")
+        if (button_number == 5):
+            gameplay_screen = self.controller.get_frame("GameplayScreen")
+            gameplay_screen.set_teams(self.export_red_players(), self.export_green_players())
+            self.controller.show_frame("GameplayScreen")
 
     def on_key_press(self, event):
         # Check if the pressed key is a function key (F1, F2, ..., F8)
@@ -139,7 +144,6 @@ class EntryScreen(tk.Frame):
         value = entry.get().strip()
         if value == "":
             return
-
 
         if col == 1:
             codename = self.controller.databaseManager.getPlayer(value)
@@ -170,3 +174,11 @@ class EntryScreen(tk.Frame):
             self.controller.networkingManager.send_broadcast(value)
 
         print(f"Value in row {row}, column {col} changed to: {value}")
+
+    # go through red table and return a list of Player objects
+    def export_red_players(self):
+        return [Player.Player("Billy", 15), Player.Player("Ethan", 10), Player.Player("Sarah", 12)]
+
+    # go through green table and return a list of Player objects
+    def export_green_players(self):
+        return [Player.Player("Bob", 20), Player.Player("Mark", 5), Player.Player("Katie", 2)]
