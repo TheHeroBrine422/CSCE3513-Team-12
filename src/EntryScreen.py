@@ -133,6 +133,7 @@ class EntryScreen(tk.Frame):
             gameplay_screen = self.controller.get_frame("GameplayScreen")
             gameplay_screen.set_teams(self.export_red_players(), self.export_green_players())
             self.controller.show_frame("GameplayScreen")
+            self.controller.change_game_state("inprogress")
 
     def on_key_press(self, event):
         # Check if the pressed key is a function key (F1, F2, ..., F8)

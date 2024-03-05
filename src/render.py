@@ -52,6 +52,11 @@ class RenderingManager(tk.Tk):
 
     def get_frame(self, name):
         return self.frames[name]
+    
+    def change_game_state(self, state):
+        self.gameState["stage"] = state
+        self.networkingManager.gameState["stage"] = state
+        self.databaseManager.gameState["stage"] = state
 
     def tick(self):
         # do actual rendering here.
