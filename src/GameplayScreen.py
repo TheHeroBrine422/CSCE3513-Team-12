@@ -1,6 +1,5 @@
 import tkinter as tk
-from tkinter.font import BOLD, Font
-from Player import Player
+from tkinter.font import Font
 
 class GameplayScreen(tk.Frame):
     # Hex codes for colors

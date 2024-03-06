@@ -42,9 +42,17 @@ class GameplayModel():
         # If they're on different teams, firing player gets 10 pts
         if (firing_player.team != hit_player.team):
             firing_player.score += 10
+            if (firing_player.team == 'green'):
+                self.green_team_score += 10
+            else:
+                self.red_team_score += 10
         # Otherwise firing player loses 10 pts
         else:
             firing_player.score -= 10
+            if (firing_player.team == 'green'):
+                self.green_team_score -= 10
+            else:
+                self.red_team_score -= 10
 
     # To be used by networkingManager
     def base_hit(self, base_id, player_equip_id):

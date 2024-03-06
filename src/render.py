@@ -3,7 +3,6 @@ from tkinter import *
 from SplashScreen import SplashScreen
 from EntryScreen import EntryScreen
 from GameplayScreen import GameplayScreen
-from GameplayModel import GameplayModel
 
 class RenderingManager(tk.Tk):
     def __init__(self, gameState, gameplayModel, networkingManager, databaseManager, *args, **kwargs):
@@ -58,8 +57,6 @@ class RenderingManager(tk.Tk):
     
     def change_game_state(self, state):
         self.gameState["stage"] = state
-        self.networkingManager.gameState["stage"] = state
-        self.databaseManager.gameState["stage"] = state
 
     def set_model_teams(self, green_team, red_team):
         self.gameplayModel.set_teams(green_team, red_team)
