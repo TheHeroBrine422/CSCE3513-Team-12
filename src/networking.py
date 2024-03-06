@@ -11,13 +11,14 @@ class NetworkingManager():
     LOCAL_ADDRESS = "127.0.0.1"
     BROADCAST_ADDRESS = "127.0.0.1"
 
-    def __init__(self, gameState):
+    def __init__(self, gameState, gameplayModel):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         self.s.bind((self.LOCAL_ADDRESS, self.RECV_PORT))
         self.s.setblocking(False)
         self.gameEndCount = 0
         self.gameState = gameState
+        self.gameplayModel = gameplayModel
 
     def send_broadcast(self, msg):
         self.s.sendto(str.encode(msg), (self.BROADCAST_ADDRESS, self.BROADCAST_PORT))

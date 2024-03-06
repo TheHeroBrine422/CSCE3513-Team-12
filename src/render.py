@@ -1,14 +1,16 @@
 import tkinter as tk
 from tkinter import *
-import SplashScreen
-import EntryScreen
-import GameplayScreen
+from SplashScreen import SplashScreen
+from EntryScreen import EntryScreen
+from GameplayScreen import GameplayScreen
+from GameplayModel import GameplayModel
 
 class RenderingManager(tk.Tk):
-    def __init__(self, gameState, networkingManager, databaseManager, *args, **kwargs):
+    def __init__(self, gameState, gameplayModel, networkingManager, databaseManager, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.gameState = gameState
         self.networkingManager = networkingManager
+        self.gameplayModel = gameplayModel
         self.databaseManager = databaseManager
         self.title("Proton Laser Tag")
         global SCREEN_HEIGHT
@@ -30,16 +32,17 @@ class RenderingManager(tk.Tk):
         self.frames = {}
 
         # Enter SplashScreen into frames dictionary
-        self.frames["SplashScreen"] = SplashScreen.SplashScreen(container, self)
+        self.frames["SplashScreen"] = SplashScreen(container, self)
         self.frames["SplashScreen"].grid(row=0, column=0, sticky="nsew")
 
         #Enter EntryScreen into frames dictionary
-        self.frames["EntryScreen"] = EntryScreen.EntryScreen(container, self)
+        self.frames["EntryScreen"] = EntryScreen(container, self)
         self.frames["EntryScreen"].grid(row=0, column=0, sticky="nsew")
 
         #Enter GameplayScreen into frames dictionary
-        self.frames["GameplayScreen"] = GameplayScreen.GameplayScreen(container, self)
+        self.frames["GameplayScreen"] = GameplayScreen(container, self, self.gameplayModel)
         self.frames["GameplayScreen"].grid(row=0, column=0, sticky="nsew")
+        self.gameplayModel.set_screen(self.frames["GameplayScreen"])
 
         # Set first frame
         self.show_frame("SplashScreen")
@@ -57,6 +60,9 @@ class RenderingManager(tk.Tk):
         self.gameState["stage"] = state
         self.networkingManager.gameState["stage"] = state
         self.databaseManager.gameState["stage"] = state
+
+    def set_model_teams(self, green_team, red_team):
+        self.gameplayModel.set_teams(green_team, red_team)
 
     def tick(self):
         # do actual rendering here.

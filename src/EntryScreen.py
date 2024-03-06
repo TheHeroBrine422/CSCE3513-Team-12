@@ -131,8 +131,7 @@ class EntryScreen(tk.Frame):
     def on_button_click(self, button_number):
         print(f"Button {button_number} clicked!")
         if (button_number == 5):
-            gameplay_screen = self.controller.get_frame("GameplayScreen")
-            gameplay_screen.set_teams(self.export_red_players(), self.export_green_players())
+            self.export_players()
             self.controller.show_frame("GameplayScreen")
             self.controller.change_game_state("inprogress")
 
@@ -179,14 +178,11 @@ class EntryScreen(tk.Frame):
 
         print(f"Value in row {row}, column {col} changed to: {value}")
 
-    # go through red table and return a list of Player objects
-    def export_red_players(self):
-        return [Player.Player("Billy", 15), Player.Player("Ethan", 10), Player.Player("Sarah", 12)]
-
-    # go through green table and return a list of Player objects
-    def export_green_players(self):
-        return [Player.Player("Bob", 20), Player.Player("Mark", 5), Player.Player("Katie", 2)]
-    
+    # go through tables and creates a list of Player objects for each team and sends it to renderingManager
+    def export_players(self):
+        red_team_out = [Player.Player("Billy", 15), Player.Player("Ethan", 10), Player.Player("Sarah", 12)]
+        green_team_out = [Player.Player("Bob", 20), Player.Player("Mark", 5), Player.Player("Katie", 2)]
+        self.controller.set_model_teams(green_team_out, red_team_out)
 
     def clear_entries(self):
         for i in range(20):

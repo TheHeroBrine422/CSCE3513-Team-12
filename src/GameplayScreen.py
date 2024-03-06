@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter.font import BOLD, Font
+from Player import Player
 
 class GameplayScreen(tk.Frame):
     # Hex codes for colors
@@ -9,11 +10,12 @@ class GameplayScreen(tk.Frame):
     GRAY = "#222222"
     WHITE = "#d9d9d9"
 
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, model):
         tk.Frame.__init__(self, parent, bg='black')
         self.controller = controller
-        self.red_team = []
-        self.green_team = []
+        self.model = model
+        self.red_team = [] # list of Player objects
+        self.green_team = [] # list of Player objects
 
         self.HEADER_FONT = Font(self.controller, family='Helvetica', size=48, weight='bold')
         self.PLAYER_FONT = Font(self.controller, family='Helvetica', size=24, weight='bold')
@@ -53,10 +55,10 @@ class GameplayScreen(tk.Frame):
         self.green_table_frame.grid_columnconfigure(1, weight=1)
 
     def set_teams(self, red, green):
-        self.red_team = red
-        self.green_team = green
-        self.red_rows = []
-        self.green_rows = []
+        self.red_team = red # list of Players
+        self.green_team = green # list of Players
+        self.red_rows = [] # list of lists of Labels
+        self.green_rows = [] # list of lists of Labels
 
         for i in range(0, len(self.red_team)):
             player_name = tk.Label(self.red_table_frame, text=self.red_team[i].name, anchor='w', bg=self.WHITE, fg=self.RED, font=self.PLAYER_FONT)
