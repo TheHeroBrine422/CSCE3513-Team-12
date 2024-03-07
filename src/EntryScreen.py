@@ -130,7 +130,8 @@ class EntryScreen(tk.Frame):
 
 
     def on_button_click(self, button_number):
-        print(f"Button {button_number} clicked!")
+        # print(f"Button {button_number} clicked!")
+        pass
             
 
     def on_key_press(self, event):
@@ -204,8 +205,7 @@ class EntryScreen(tk.Frame):
                 self.green_team[row - 1]["equipmentID"] = value
             # notify networkingManager that equipment with id is in use
             self.controller.networkingManager.send_broadcast(value)
-
-        print(f"Value in row {row}, column {col} changed to: {value}")
+        #print(f"Value in row {row}, column {col} changed to: {value}")
 
     # go through tables and creates a list of Player objects for each team and sends it to renderingManager
     def export_players(self):
