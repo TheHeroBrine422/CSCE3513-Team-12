@@ -27,6 +27,23 @@ class DatabaseManager():
             print("Player not found")
             return None
     
+    def updatePlayer(self, player_id, new_codename):
+        try:
+            existing_player, error = self.supabase.table('Players').select('*').eq('id', player_id).execute()
+            if error and not (error[0] == 'count' and error[1] is None):
+                print(f"Error: {error}")
+            elif existing_player[1]:
+                # Player found, update the codename
+                _, update_error = self.supabase.table('Players').update({'codename': new_codename}).eq('id', player_id).execute()
+                if update_error:
+                    print(f"Error updating player: {update_error}")
+                else:
+                    print(f"Player {player_id} - Codename updated to {new_codename}")
+            else:
+                print("Player not found")
+        except Exception as e:
+            print(f"Error: {e}")
+    
     def addPlayer(self, id, codename):
         # Check to see if the player already exists
         existing_player, error = self.supabase.table('Players').select('*').eq('id', id).execute()
