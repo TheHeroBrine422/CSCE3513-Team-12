@@ -110,7 +110,7 @@ class EntryScreen(tk.Frame):
         column3_label_green = tk.Label(self.green_table_frame, text="Equipment ID", font=("Helvetica", 15), width=11, anchor="w", bg=self.GREEN, fg=self.WHITE)
         column3_label_green.grid(row=0, column=3, padx=(5, 0), pady=5)
 
-        # Create 15x2 tables with Entry widgets and row numbers for the Green Team
+        # Create 15x3 tables with Entry widgets and row numbers for the Green Team
         self.entries_green = []
         for i in range(1, 21):
             row_label = tk.Label(self.green_table_frame, text=f"{i}.", font = ("Helvetica", 15), width=3, anchor="w", bg=self.GREEN, fg=self.WHITE)
@@ -151,11 +151,13 @@ class EntryScreen(tk.Frame):
         if col == 1:
             codename = self.controller.databaseManager.getPlayer(value)
             if team == 'red':
+                self.entries_red[row-1][col].delete(0, tk.END) # This clears the codename field before we insert the ID's codename so they dont stack
                 self.red_team[row-1]["uniqueID"] = value
                 if codename is not None:
                     self.red_team[row - 1]["codename"] = codename
                     self.entries_red[row-1][col].insert(0, codename)
             if team == 'green':
+                self.entries_green[row-1][col].delete(0, tk.END)
                 self.green_team[row - 1]["uniqueID"] = value
                 if codename is not None:
                     self.red_team[row - 1]["codename"] = codename
@@ -168,7 +170,12 @@ class EntryScreen(tk.Frame):
             else:
                 self.green_team[row - 1]["codename"] = value
                 self.tempUniqueID = self.green_team[row - 1]["uniqueID"]
-            self.controller.databaseManager.addPlayer(self.tempUniqueID, value)
+
+            codename = self.controller.databaseManager.getPlayer(self.tempUniqueID)
+            if codename is None:    # If the codename is none then this ID hasn't been registered yet, so we add them.
+                self.controller.databaseManager.addPlayer(self.tempUniqueID, value)
+            else:   # else, we update with the new name
+                self.controller.databaseManager.updatePlayer(self.tempUniqueID, value)
         elif col == 3:
             if team == 'red':
                 self.red_team[row - 1]["equipmentID"] = value
@@ -180,8 +187,20 @@ class EntryScreen(tk.Frame):
 
     # go through tables and creates a list of Player objects for each team and sends it to renderingManager
     def export_players(self):
-        red_team_out = [Player.Player("Billy", 15), Player.Player("Ethan", 10), Player.Player("Sarah", 12)]
-        green_team_out = [Player.Player("Bob", 20), Player.Player("Mark", 5), Player.Player("Katie", 2)]
+        red_team_out = []
+        green_team_out = []
+
+        for i in range(20):
+            red_player_data = self.red_team[i]
+            green_player_data = self.green_team[i]
+
+            # Check if the player data is valid (uniqueID and codename are not empty)
+            if red_player_data["uniqueID"] != "" and red_player_data["codename"]:
+                red_team_out.append(Player.Player(red_player_data["codename"], red_player_data["equipmentID"]))
+
+            if green_player_data["uniqueID"] != "" and green_player_data["codename"]:
+                green_team_out.append(Player.Player(green_player_data["codename"], green_player_data["equipmentID"]))
+
         self.controller.set_model_teams(green_team_out, red_team_out)
 
     def clear_entries(self):
