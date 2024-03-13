@@ -130,11 +130,13 @@ class EntryScreen(tk.Frame):
 
 
     def on_button_click(self, button_number):
-        # print(f"Button {button_number} clicked!")
-        pass
+        if button_number == 5:
+            self.start_game()
+        elif button_number == 8:
+            self.clear_entries()
             
-
     def on_key_press(self, event):
+        print("Key pressed:", event.keysym)
         # Check if the pressed key is a function key (F1, F2, ..., F8)
         if event.keysym.startswith("F") and event.keysym[1:].isdigit():
             button_number = int(event.keysym[1:])
