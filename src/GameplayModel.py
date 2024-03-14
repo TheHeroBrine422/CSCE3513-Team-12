@@ -73,3 +73,14 @@ class GameplayModel():
         elif ((base_id == self.GREEN_TEAM_CODE) and (firing_player.team == 'red')):
             # red team gets 100 pts
             self.red_team_score += 100
+            
+    def sort_teams_by_scores(self):
+        # create a list of tuples, each containing a team and their total score
+        teams_and_scores = [('red', sum (player.score for player in self.red_team)), 
+                            ('green', sum (player.score for player in self.green_team))]
+        
+        # sort the list of tuples by score
+        sorted_teams_and_scores = sorted(teams_and_scores, key=lambda x: x[1], reverse=True)
+        
+        # return the sorted list of tuples
+        return sorted_teams_and_scores

@@ -102,8 +102,10 @@ class GameplayScreen(tk.Frame):
                 self.hit_stream_texts[i].grid(row=i, column=0, padx=(5, 0), pady=5, sticky='new')
 
     def set_teams(self, red, green):
-        self.red_team = red # list of Players
-        self.green_team = green # list of Players
+        # Sort the teams by player score
+        self.red_team = sorted(red, key=lambda player: player.score, reverse=True) # list of Players
+        self.green_team = sorted(green, key=lambda player: player.score, reverse=True) # list of Players
+        
         self.red_rows = [] # list of lists of Labels
         self.green_rows = [] # list of lists of Labels
 
