@@ -12,7 +12,7 @@ Team 12's CSCE3513 Software Engineering Project with Jim Strother
 ### Install/Usage:
 
 1. Update system with `sudo apt update`
-2. Install system dependencies with `sudo apt install -y git python3-pip git python3-tk`
+2. Install system dependencies with `sudo apt install -y git python3-pip python3-tk`
 3. Clone the repo with `git clone https://github.com/TheHeroBrine422/CSCE3513-Team-12.git`
 4. Enter the repo with `cd CSCE3513-Team-12`
 5. Install dependencies with `pip install -r src/requirements.txt`
