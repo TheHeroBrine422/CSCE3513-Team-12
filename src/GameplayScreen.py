@@ -66,12 +66,17 @@ class GameplayScreen(tk.Frame):
         self.add_hit(Player("missy", 2, 'red'), Player("Bob", 1, 'green'))
 
         # Create frame for TIMER beneath HIT STREAM
-        timer_frame = tk.Frame(self, bg=self.GRAY)
-        timer_frame.grid(row=2, column=0, sticky='sew')
+        self.timer_frame = tk.Frame(self, bg=self.GRAY)
+        self.timer_frame.grid(row=2, column=0, sticky='sew')
 
-        # create timer
-        self.timer_label = tk.Label(timer_frame, text="6:00", font=self.HEADER_FONT, bg=self.GRAY, fg=self.WHITE)
+        # create timer label, but don't start the timer yet
+        self.timer_label = tk.Label(self.timer_frame, text="6:00", font=self.HEADER_FONT, bg=self.GRAY, fg=self.WHITE)
         self.timer_label.pack()
+
+    def on_show(self, event):
+        # Start the countdown timer when the screen is shown
+        self.remaining_time = 6 * 60  # 6 minutes in seconds
+        self.update_timer()  # Start the countdown
 
     # add a hit message to hit stream
     def add_hit(self, fired, hit):
@@ -132,3 +137,48 @@ class GameplayScreen(tk.Frame):
         
         # Center the Green Team table
         self.green_table_frame.pack(side=tk.TOP, pady=5, fill='both', expand=True)
+
+    # Countdown timer update function
+    def update_timer(self):
+        minutes = self.remaining_time // 60
+        seconds = self.remaining_time % 60
+        self.timer_label.config(text=f"{minutes:02}:{seconds:02}")
+        if self.remaining_time > 0:
+            self.remaining_time -= 1
+            self.after(1000, self.update_timer)
+        else:
+            self.game_over_popup()
+
+    # Function to display the "Game Over" popup
+    def game_over_popup(self):
+        self.popup_frame = tk.Frame(self, bg=self.WHITE, bd=5, relief=tk.SOLID, highlightbackground="yellow", highlightthickness=5)
+        self.popup_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        label = tk.Label(self.popup_frame, text="Game Over!", font=self.HEADER_FONT, bg=self.WHITE, fg=self.RED)
+        label.pack(pady=20)
+
+        btn_quit = tk.Button(self.popup_frame, text="Quit", command=self.quit_to_entry_screen, font=self.SCORE_FONT, bg=self.RED, fg=self.WHITE)
+        btn_quit.pack(pady=10)
+    
+    def quit_to_entry_screen(self):
+        if hasattr(self, "popup_frame") and self.popup_frame:
+            self.popup_frame.destroy()
+        # Clear player names and scores
+        self.clear_teams()
+        # Call the show_frame method of the controller (RenderingManager) to switch to the entry screen
+        self.controller.show_frame("EntryScreen")
+
+    def clear_teams(self):
+        # Clear player names and scores from both teams
+        self.red_team = []
+        self.green_team = []
+        # Destroy all labels displaying player names and scores
+        for label_list in self.red_rows:
+            for label in label_list:
+                label.destroy()
+        for label_list in self.green_rows:
+            for label in label_list:
+                label.destroy()
+        # Clear the lists holding the labels
+        self.red_rows = []
+        self.green_rows = []
