@@ -51,6 +51,7 @@ class RenderingManager(tk.Tk):
         frame = self.frames[cont]
         # raises the current frame to the top
         frame.tkraise()
+        frame.on_show()
 
     def get_frame(self, name):
         return self.frames[name]

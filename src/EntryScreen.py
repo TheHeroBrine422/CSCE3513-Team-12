@@ -251,3 +251,6 @@ class EntryScreen(tk.Frame):
         self.export_players()
         self.controller.show_frame("GameplayScreen")
         self.controller.change_game_state("inprogress")
+
+    def on_show(self):
+        pass

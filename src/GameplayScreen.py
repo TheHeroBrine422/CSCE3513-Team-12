@@ -73,7 +73,7 @@ class GameplayScreen(tk.Frame):
         self.timer_label = tk.Label(self.timer_frame, text="6:00", font=self.HEADER_FONT, bg=self.GRAY, fg=self.WHITE)
         self.timer_label.pack()
 
-    def on_show(self, event):
+    def on_show(self):
         # Start the countdown timer when the screen is shown
         self.remaining_time = 6 * 60  # 6 minutes in seconds
         self.update_timer()  # Start the countdown
@@ -140,12 +140,19 @@ class GameplayScreen(tk.Frame):
 
     # Countdown timer update function
     def update_timer(self):
+        # get number of minutes
         minutes = self.remaining_time // 60
+        # get number of seconds
         seconds = self.remaining_time % 60
+        # set label text
         self.timer_label.config(text=f"{minutes:02}:{seconds:02}")
+        # if we still have more time (i.e. more than 0 seconds left)
         if self.remaining_time > 0:
+            # decrement
             self.remaining_time -= 1
+            # update after a second
             self.after(1000, self.update_timer)
+        # otherwise say game over
         else:
             self.game_over_popup()
 

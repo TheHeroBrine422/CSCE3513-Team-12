@@ -20,3 +20,6 @@ class SplashScreen(tk.Frame):
 
         # switch to EntryScreen frame after 5 seconds
         parent.after(3000, controller.show_frame, "EntryScreen")
+
+    def on_show(self):
+        pass
