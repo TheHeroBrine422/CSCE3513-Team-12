@@ -87,7 +87,7 @@ class EntryScreen(tk.Frame):
         column2_label_red.grid(row=0, column=3, padx=(5, 0), pady=5)
 
         self.entries_red = []
-        for i in range(1, 21):
+        for i in range(1, 16):
             row_label = tk.Label(self.red_table_frame, text=f"{i}.", font = ("Helvetica", 15), width=3, anchor="w", bg=self.RED, fg=self.WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
@@ -113,7 +113,7 @@ class EntryScreen(tk.Frame):
 
         # Create 15x3 tables with Entry widgets and row numbers for the Green Team
         self.entries_green = []
-        for i in range(1, 21):
+        for i in range(1, 16):
             row_label = tk.Label(self.green_table_frame, text=f"{i}.", font = ("Helvetica", 15), width=3, anchor="w", bg=self.GREEN, fg=self.WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
