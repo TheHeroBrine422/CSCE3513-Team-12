@@ -1,5 +1,5 @@
 import tkinter as tk
-import Player
+from Player import Player
 
 class EntryScreen(tk.Frame):
     def __init__(self, parent, controller):
@@ -220,10 +220,10 @@ class EntryScreen(tk.Frame):
 
             # Check if the player data is valid (uniqueID and codename are not empty)
             if red_player_data["uniqueID"] != "" and red_player_data["codename"]:
-                red_team_out.append(Player.Player(red_player_data["codename"], red_player_data["equipmentID"], 'red'))
+                red_team_out.append(Player(str(red_player_data["codename"]), int(red_player_data["equipmentID"]), 'red'))
 
             if green_player_data["uniqueID"] != "" and green_player_data["codename"]:
-                green_team_out.append(Player.Player(green_player_data["codename"], green_player_data["equipmentID"], 'green'))
+                green_team_out.append(Player(str(green_player_data["codename"]), int(green_player_data["equipmentID"]), 'green'))
 
         self.controller.set_model_teams(green_team_out, red_team_out)
 

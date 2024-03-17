@@ -10,6 +10,8 @@ class GameplayScreen(tk.Frame):
     GRAY = "#222222"
     WHITE = "#d9d9d9"
     HIT_STREAM_MAX = 5
+    GREEN_TEAM_CODE = 43
+    RED_TEAM_CODE  = 53
 
     def __init__(self, parent, controller, model):
         tk.Frame.__init__(self, parent, bg='black')
@@ -31,29 +33,41 @@ class GameplayScreen(tk.Frame):
         # Create frame for player SCORES on TOP of screen
         score_frame = tk.Frame(self, bg='black')
         score_frame.grid(row=0, column=0, sticky='nsew')
+        score_frame.grid_rowconfigure(0, weight=1)
+        score_frame.grid_rowconfigure(1, weight=5)
+        score_frame.grid_columnconfigure(0, weight=1)
+        score_frame.grid_columnconfigure(1, weight=1)
+        score_frame.grid_columnconfigure(2, weight=1)
+        score_frame.grid_columnconfigure(3, weight=1)
+
+        # Create labels for the Red and Green Teams
+        red_team_label = tk.Label(score_frame, text="RED TEAM", font=self.HEADER_FONT, bg=self.WHITE, fg=self.RED)
+        red_team_label.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+
+        self.red_team_score_label = tk.Label(score_frame, text="0", font=self.HEADER_FONT, bg=self.WHITE, fg=self.RED)
+        self.red_team_score_label.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
+
+        green_team_label = tk.Label(score_frame, text="GREEN TEAM", font=self.HEADER_FONT, bg=self.WHITE, fg=self.GREEN)
+        green_team_label.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
+
+        self.green_team_score_label = tk.Label(score_frame, text="0", font=self.HEADER_FONT, bg=self.WHITE, fg=self.GREEN)
+        self.green_team_score_label.grid(row=0, column=3, padx=5, pady=5, sticky='nsew')
 
         # Create frame for each team
         self.red_team_frame = tk.Frame(score_frame, bd=2, relief=tk.GROOVE, bg=self.WHITE)
-        self.red_team_frame.pack(side='left', padx=10, pady=5, anchor="n", fill='both', expand=True)
+        self.red_team_frame.grid(row=1, column=0, padx=5, pady=5, columnspan=2, sticky='nsew')
 
         self.green_team_frame = tk.Frame(score_frame, bd=2, relief=tk.GROOVE, bg=self.WHITE)
-        self.green_team_frame.pack(side='left', padx=10, pady=5, anchor="n", fill='both', expand=True)
-
-        # Create labels for the Red and Green Teams
-        red_team_label = tk.Label(self.red_team_frame, text="RED TEAM", font=self.HEADER_FONT, bg=self.WHITE, fg=self.RED)
-        red_team_label.pack()
-
-        green_team_label = tk.Label(self.green_team_frame, text="GREEN TEAM", font=self.HEADER_FONT, bg=self.WHITE, fg=self.GREEN)
-        green_team_label.pack()
+        self.green_team_frame.grid(row=1, column=2, padx=5, pady=5, columnspan=2, sticky='nsew')
 
         # Create frames for the tables of the Red and Green Teams
         self.red_table_frame = tk.Frame(self.red_team_frame, bg=self.WHITE)
-        self.red_table_frame.pack(side='left', padx=10, pady=5, anchor='n', fill='both', expand=True)
+        self.red_table_frame.pack(side='left', padx=10, pady=5, anchor='w', fill='both', expand=True)
         self.red_table_frame.grid_columnconfigure(0, weight=2)
         self.red_table_frame.grid_columnconfigure(1, weight=1)
 
         self.green_table_frame = tk.Frame(self.green_team_frame, bg=self.WHITE)
-        self.green_table_frame.pack(side='left', padx=10, pady=5, anchor='n', fill='both', expand=True)
+        self.green_table_frame.pack(side='left', padx=10, pady=5, anchor='w', fill='both', expand=True)
         self.green_table_frame.grid_columnconfigure(0, weight=2)
         self.green_table_frame.grid_columnconfigure(1, weight=1)
 
@@ -61,9 +75,6 @@ class GameplayScreen(tk.Frame):
         self.hit_stream_frame = tk.Frame(self, bg=self.WHITE,padx=50)
         self.hit_stream_frame.grid(row=1, column=0, sticky='nsew')
         self.hit_stream_frame.grid_columnconfigure(0, weight=1)
-        # filler hits
-        self.add_hit(Player("Bob", 1, 'green'), Player("missy", 2, 'red'))
-        self.add_hit(Player("missy", 2, 'red'), Player("Bob", 1, 'green'))
 
         # Create frame for TIMER beneath HIT STREAM
         self.timer_frame = tk.Frame(self, bg=self.GRAY)
@@ -97,6 +108,29 @@ class GameplayScreen(tk.Frame):
             self.hit_stream_texts.pop(0)
         self.format_hit_stream()
 
+    def add_base_hit(self, fired, hit):
+        base_name = ""
+        if (hit == self.RED_TEAM_CODE):
+            base_name = "RED BASE"
+        else:
+            base_name = "GREEN BASE"
+        message = fired.name + " hit the " + base_name
+        hit_text = tk.Text(self.hit_stream_frame, bg=self.WHITE, fg=self.GRAY, font=self.PLAYER_FONT, width=1, height=1, highlightthickness=0)
+        hit_text.insert(tk.INSERT, message)
+        hit_text.tag_add('p1', '1.0', '1.0 wordend')
+        hit_text.tag_add('base', 'end -2 chars wordstart', tk.END)
+        if fired.team == 'red':
+            hit_text.tag_config('p1', foreground=self.RED)
+            hit_text.tag_config('base', foreground=self.GREEN)
+        else:
+            hit_text.tag_config('p1', foreground=self.GREEN)
+            hit_text.tag_config('base', foreground=self.RED)
+        hit_text.configure(state=tk.DISABLED)
+        self.hit_stream_texts.append(hit_text)
+        if (len(self.hit_stream_texts) > self.HIT_STREAM_MAX):
+            self.hit_stream_texts.pop(0)
+        self.format_hit_stream()
+
     # reformat hit stream
     def format_hit_stream(self):
         # for each text
@@ -108,8 +142,8 @@ class GameplayScreen(tk.Frame):
 
     def set_teams(self, red, green):
         # Sort the teams by player score
-        self.red_team = sorted(red, key=lambda player: player.score, reverse=True) # list of Players
-        self.green_team = sorted(green, key=lambda player: player.score, reverse=True) # list of Players
+        self.red_team = red # list of Players
+        self.green_team = green # list of Players
         
         self.red_rows = [] # list of lists of Labels
         self.green_rows = [] # list of lists of Labels
@@ -137,6 +171,12 @@ class GameplayScreen(tk.Frame):
         
         # Center the Green Team table
         self.green_table_frame.pack(side=tk.TOP, pady=5, fill='both', expand=True)
+
+    def format_score(self, scores):
+        # set red score label text
+        self.red_team_score_label.config(text=str(scores[0]))
+        # set green score label text
+        self.green_team_score_label.config(text=str(scores[1]))
 
     # Countdown timer update function
     def update_timer(self):

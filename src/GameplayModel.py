@@ -18,6 +18,12 @@ class GameplayModel():
         self.red_team = red_team_in
         self.green_team = green_team_in
         self.screen.set_teams(self.red_team, self.green_team)
+        
+        ###### filler hits ######
+        self.shots_fired(self.red_team[0].equipment_id, self.green_team[0].equipment_id)
+        self.shots_fired(self.green_team[0].equipment_id, self.red_team[0].equipment_id)
+        self.base_hit(self.green_team[0].equipment_id, self.RED_TEAM_CODE)
+        #########################
 
     # To be used by networkingManager
     def shots_fired(self, fire_equip_id, hit_equip_id):
@@ -42,20 +48,17 @@ class GameplayModel():
         # If they're on different teams, firing player gets 10 pts
         if (firing_player.team != hit_player.team):
             firing_player.score += 10
-            if (firing_player.team == 'green'):
-                self.green_team_score += 10
-            else:
-                self.red_team_score += 10
         # Otherwise firing player loses 10 pts
         else:
             firing_player.score -= 10
-            if (firing_player.team == 'green'):
-                self.green_team_score -= 10
-            else:
-                self.red_team_score -= 10
+
+        self.screen.add_hit(firing_player, hit_player)
+        self.sort_teams()
+        self.update_screen()
 
     # To be used by networkingManager
-    def base_hit(self, base_id, player_equip_id):
+    def base_hit(self, player_equip_id, base_id):
+        firing_player = Player()
         # Find firing player
         for player in self.red_team:
             if (player.equipment_id == player_equip_id):
@@ -67,20 +70,34 @@ class GameplayModel():
 
         # If the red base was hit AND the player is on the green team
         if ((base_id == self.RED_TEAM_CODE) and (firing_player.team == 'green')):
-            # green team gets 100 pts
-            self.green_team_score += 100
+            # player gets 100 pts
+            firing_player.score += 100
         # Otherwise if the green base was hit AND the player is on the red team
         elif ((base_id == self.GREEN_TEAM_CODE) and (firing_player.team == 'red')):
-            # red team gets 100 pts
-            self.red_team_score += 100
+            # player gets 100 pts
+            firing_player.score += 100
+
+        # add message on screen
+        self.screen.add_base_hit(firing_player, base_id)
+        # resort teams
+        self.sort_teams()
+        # update screen
+        self.update_screen()
             
-    def sort_teams_by_scores(self):
+    def get_team_scores(self):
         # create a list of tuples, each containing a team and their total score
-        teams_and_scores = [('red', sum (player.score for player in self.red_team)), 
-                            ('green', sum (player.score for player in self.green_team))]
+        team_scores = [sum (player.score for player in self.red_team), 
+                       sum (player.score for player in self.green_team)]
         
-        # sort the list of tuples by score
-        sorted_teams_and_scores = sorted(teams_and_scores, key=lambda x: x[1], reverse=True)
-        
-        # return the sorted list of tuples
-        return sorted_teams_and_scores
+        return team_scores
+    
+    def sort_teams(self):
+        # Sort the teams by player score
+        self.red_team = sorted(self.red_team, key=lambda player: player.score, reverse=True) # list of Players
+        self.green_team = sorted(self.green_team, key=lambda player: player.score, reverse=True) # list of Players
+
+    def update_screen(self):
+        # reformat the score
+        self.screen.format_score(self.get_team_scores())
+        # redisplay teams in new order
+        self.screen.set_teams(self.red_team, self.green_team)
