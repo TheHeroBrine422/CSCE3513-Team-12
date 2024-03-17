@@ -22,7 +22,7 @@ class GameplayModel():
         ###### filler hits ######
         self.shots_fired(self.red_team[0].equipment_id, self.green_team[0].equipment_id)
         self.shots_fired(self.green_team[0].equipment_id, self.red_team[0].equipment_id)
-        self.base_hit(self.green_team[0].equipment_id, self.RED_TEAM_CODE)
+        self.base_hit(self.green_team[1].equipment_id, self.RED_TEAM_CODE)
         #########################
 
     # To be used by networkingManager
