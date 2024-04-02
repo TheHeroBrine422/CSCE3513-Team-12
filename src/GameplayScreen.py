@@ -20,6 +20,8 @@ class GameplayScreen(tk.Frame):
         self.red_team = [] # list of Player objects
         self.green_team = [] # list of Player objects
         self.hit_stream_texts = [] # list of Texts to display messages
+        self.red_rows = [] # list of lists of Labels
+        self.green_rows = [] # list of lists of Labels
 
         self.HEADER_FONT = Font(self.controller, family='Helvetica', size=48, weight='bold')
         self.PLAYER_FONT = Font(self.controller, family='Helvetica', size=24, weight='bold')
@@ -144,10 +146,8 @@ class GameplayScreen(tk.Frame):
         # Sort the teams by player score
         self.red_team = red # list of Players
         self.green_team = green # list of Players
-        
-        self.red_rows = [] # list of lists of Labels
-        self.green_rows = [] # list of lists of Labels
 
+        # Add player names + scores, sorted by score
         for i in range(0, len(self.red_team)):
             player_name = tk.Label(self.red_table_frame, text=self.red_team[i].name, anchor='w', bg=self.WHITE, fg=self.RED, font=self.PLAYER_FONT)
             player_name.grid(row=i, column=0, padx=(5, 0), pady=5, sticky='w')
@@ -171,6 +171,20 @@ class GameplayScreen(tk.Frame):
         
         # Center the Green Team table
         self.green_table_frame.pack(side=tk.TOP, pady=5, fill='both', expand=True)
+
+    def update_teams(self, red, green):
+        # Set the teams to what is being passed in (it's sorted by player score)
+        self.red_team = red # list of Players
+        self.green_team = green # list of Players
+
+        # Update player names + scores, sorted by score
+        for i in range(0, len(self.red_team)):
+            self.red_rows[i][0].config(text = self.red_team[i].name)
+            self.red_rows[i][1].config(text = self.red_team[i].score)
+
+        for i in range(0, len(self.green_team)):
+            self.green_rows[i][0].config(text = self.green_team[i].name)
+            self.green_rows[i][1].config(text = self.green_team[i].score)
 
     def format_score(self, scores):
         # set red score label text

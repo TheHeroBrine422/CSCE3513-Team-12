@@ -100,4 +100,4 @@ class GameplayModel():
         # reformat the score
         self.screen.format_score(self.get_team_scores())
         # redisplay teams in new order
-        self.screen.set_teams(self.red_team, self.green_team)
+        self.screen.update_teams(self.red_team, self.green_team)
