@@ -18,12 +18,6 @@ class GameplayModel():
         self.red_team = red_team_in
         self.green_team = green_team_in
         self.screen.set_teams(self.red_team, self.green_team)
-        
-        ###### filler hits ######
-        self.shots_fired(self.red_team[0].equipment_id, self.green_team[0].equipment_id)
-        self.shots_fired(self.green_team[0].equipment_id, self.red_team[0].equipment_id)
-        self.base_hit(self.green_team[1].equipment_id, self.RED_TEAM_CODE)
-        #########################
 
     # To be used by networkingManager
     def shots_fired(self, fire_equip_id, hit_equip_id):
