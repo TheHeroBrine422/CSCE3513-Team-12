@@ -6,6 +6,7 @@ from GameplayModel import GameplayModel
 gameplayModel = GameplayModel()
 
 databaseManager = DatabaseManager()
+databaseManager.getUsers()
 networkingManager = NetworkingManager(gameplayModel)
 gameplayModel.set_networker(networkingManager)
 renderingManager = RenderingManager(gameplayModel, networkingManager, databaseManager)

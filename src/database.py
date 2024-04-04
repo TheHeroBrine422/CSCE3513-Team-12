@@ -63,10 +63,3 @@ class DatabaseManager():
             print(f"Error: {error}")
         else:
             print(f"Table cleared successfully")
-        
-
-    
-if __name__ == "__main__":
-    databaseManager = DatabaseManager({})
-    databaseManager.getUsers()
-
