@@ -13,6 +13,8 @@ class GameplayScreen(tk.Frame):
     HIT_STREAM_MAX = 5
     GREEN_TEAM_CODE = 43
     RED_TEAM_CODE  = 53
+    STARTUP_LENGTH = 30
+    GAME_LENGTH = 360
 
     def __init__(self, parent, controller, model):
         tk.Frame.__init__(self, parent, bg='black')
@@ -89,7 +91,7 @@ class GameplayScreen(tk.Frame):
 
     def on_show(self):
         # Start the countdown timer when the screen is shown
-        self.remaining_time = 30   # 6 minutes in seconds
+        self.remaining_time = self.STARTUP_LENGTH   # starting timer
         self.update_timer()  # Start the countdown
 
     # add a hit message to hit stream
@@ -209,10 +211,11 @@ class GameplayScreen(tk.Frame):
             self.after(1000, self.update_timer)
         # otherwise say game over
         elif self.model.state == Stage.STARTING:
-            self.model.set_game_state(Stage.ACTIVE_GAME)
-            self.remaining_time = 360
+            self.model.start_game()
+            self.remaining_time = self.GAME_LENGTH
             self.update_timer()
         else:
+            self.model.end_game()
             self.game_over_popup()
 
     # Function to display the "Game Over" popup
@@ -231,6 +234,7 @@ class GameplayScreen(tk.Frame):
             self.popup_frame.destroy()
         # Clear player names and scores
         self.clear_teams()
+        self.model.reset()
         # Call the show_frame method of the controller (RenderingManager) to switch to the entry screen
         self.controller.show_frame("EntryScreen")
 

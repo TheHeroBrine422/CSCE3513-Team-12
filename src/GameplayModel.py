@@ -35,6 +35,13 @@ class GameplayModel():
         self.green_team = green_team_in
         self.gameplayScreen.set_teams(self.red_team, self.green_team)
 
+    def reset(self):
+        self.set_game_state(Stage.ENTER_TEAMS)
+        self.red_team.clear()
+        self.green_team.clear()
+        self.red_team_score = 0
+        self.green_team_score = 0
+
     # To be used by networkingManager
     def shots_fired(self, fire_equip_id, hit_equip_id):
         firing_player = Player()
@@ -105,6 +112,16 @@ class GameplayModel():
         # Sort the teams by player score
         self.red_team = sorted(self.red_team, key=lambda player: player.score, reverse=True) # list of Players
         self.green_team = sorted(self.green_team, key=lambda player: player.score, reverse=True) # list of Players
+
+    def start_game(self):
+        self.set_game_state(Stage.ACTIVE_GAME)
+        self.networkingManager.send_broadcast("202")
+
+    def end_game(self):
+        self.set_game_state(Stage.FINISHED)
+        self.networkingManager.send_broadcast("221")
+        self.networkingManager.send_broadcast("221")
+        self.networkingManager.send_broadcast("221")
 
     def update_gameplay_screen(self):
         # reformat the score
