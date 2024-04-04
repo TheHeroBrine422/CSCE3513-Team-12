@@ -5,9 +5,8 @@ from EntryScreen import EntryScreen
 from GameplayScreen import GameplayScreen
 
 class RenderingManager(tk.Tk):
-    def __init__(self, gameState, gameplayModel, networkingManager, databaseManager, *args, **kwargs):
+    def __init__(self, gameplayModel, networkingManager, databaseManager, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.gameState = gameState
         self.networkingManager = networkingManager
         self.gameplayModel = gameplayModel
         self.databaseManager = databaseManager
@@ -57,7 +56,7 @@ class RenderingManager(tk.Tk):
         return self.frames[name]
     
     def change_game_state(self, state):
-        self.gameState["stage"] = state
+        self.gameplayModel.set_game_state(state)
 
     def set_model_teams(self, green_team, red_team):
         self.gameplayModel.set_teams(green_team, red_team)

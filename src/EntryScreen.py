@@ -1,5 +1,6 @@
 import tkinter as tk
 from Player import Player
+from Stage import Stage
 
 class EntryScreen(tk.Frame):
     def __init__(self, parent, controller):
@@ -250,7 +251,7 @@ class EntryScreen(tk.Frame):
     def start_game(self):
         self.export_players()
         self.controller.show_frame("GameplayScreen")
-        self.controller.change_game_state("inprogress")
+        self.controller.change_game_state(Stage.STARTING)
 
     def on_show(self):
         pass

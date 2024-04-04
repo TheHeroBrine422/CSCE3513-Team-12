@@ -4,6 +4,7 @@
 # strother's udp: https://github.com/jstrother123/photon-main/tree/main/udp_files
 
 import socket
+from Stage import Stage
 
 class NetworkingManager():
     BROADCAST_PORT = 7500
@@ -11,13 +12,12 @@ class NetworkingManager():
     LOCAL_ADDRESS = "127.0.0.1"
     BROADCAST_ADDRESS = "127.0.0.1"
 
-    def __init__(self, gameState, gameplayModel):
+    def __init__(self, gameplayModel):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         self.s.bind((self.LOCAL_ADDRESS, self.RECV_PORT))
         self.s.setblocking(False)
         self.gameEndCount = 0
-        self.gameState = gameState
         self.gameplayModel = gameplayModel
 
     def send_broadcast(self, msg):
@@ -25,11 +25,11 @@ class NetworkingManager():
 
 
     def tick(self):
-        if self.gameState["stage"] == "starting":
+        if self.gameplayModel.state == Stage.STARTING:
             self.send_broadcast("202")
             self.gameEndCount = 0
-            self.gameState["stage"] = "running"
-        elif self.gameState["stage"] == "finished" and self.gameEndCount < 3:
+            self.gameplayModel.state == Stage.ACTIVE_GAME
+        elif self.gameplayModel.state == Stage.FINSIHED and self.gameEndCount < 3:
             self.send_broadcast("221")
             self.gameEndCount += 1
         else:

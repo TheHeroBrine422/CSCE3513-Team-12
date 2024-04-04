@@ -3,8 +3,7 @@ from supabase import create_client
 
 
 class DatabaseManager():
-    def __init__(self, gameState):
-        self.gameState = gameState
+    def __init__(self):
         url = "https://saiciiruhdotdjxznipy.supabase.co"
         key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhaWNpaXJ1aGRvdGRqeHpuaXB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgwMjc4NzEsImV4cCI6MjAyMzYwMzg3MX0.QmYOxHO_M-10pN_eW_Gy4SOpbZ8F0DepmcVTxAzkmy8"
 

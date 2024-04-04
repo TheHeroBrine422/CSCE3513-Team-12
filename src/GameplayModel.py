@@ -1,23 +1,39 @@
 from Player import Player
+from Stage import Stage
 
 class GameplayModel():
     GREEN_TEAM_CODE = 43
     RED_TEAM_CODE  = 53
     red_team = [] # list of Player objects
     green_team = [] # list of Player objects
-    screen = None
+    gameplayScreen = None
+    renderingManager = None
+    networkingManager = None
+    state = None
 
     def __init__(self):
+        self.running = True
+        self.state = Stage.ENTER_TEAMS
         self.red_team_score = 0
         self.green_team_score = 0
+        self.state = Stage.STARTING
+
+    def set_game_state(self, newState):
+        self.state = newState
+
+    def set_renderer(self, rm):
+        self.renderingManager = rm
+
+    def set_networker(self, nm):
+        self.networkingManager = nm
 
     def set_screen(self, gameplayScreen):
-        self.screen = gameplayScreen
+        self.gameplayScreen = gameplayScreen
 
     def set_teams(self, green_team_in, red_team_in):
         self.red_team = red_team_in
         self.green_team = green_team_in
-        self.screen.set_teams(self.red_team, self.green_team)
+        self.gameplayScreen.set_teams(self.red_team, self.green_team)
 
     # To be used by networkingManager
     def shots_fired(self, fire_equip_id, hit_equip_id):
@@ -46,9 +62,9 @@ class GameplayModel():
         else:
             firing_player.score -= 10
 
-        self.screen.add_hit(firing_player, hit_player)
+        self.gameplayScreen.add_hit(firing_player, hit_player)
         self.sort_teams()
-        self.update_screen()
+        self.update_gameplay_screen()
 
     # To be used by networkingManager
     def base_hit(self, player_equip_id, base_id):
@@ -72,11 +88,11 @@ class GameplayModel():
             firing_player.score += 100
 
         # add message on screen
-        self.screen.add_base_hit(firing_player, base_id)
+        self.gameplayScreen.add_base_hit(firing_player, base_id)
         # resort teams
         self.sort_teams()
         # update screen
-        self.update_screen()
+        self.update_gameplay_screen()
             
     def get_team_scores(self):
         # create a list of tuples, each containing a team and their total score
@@ -90,8 +106,8 @@ class GameplayModel():
         self.red_team = sorted(self.red_team, key=lambda player: player.score, reverse=True) # list of Players
         self.green_team = sorted(self.green_team, key=lambda player: player.score, reverse=True) # list of Players
 
-    def update_screen(self):
+    def update_gameplay_screen(self):
         # reformat the score
-        self.screen.format_score(self.get_team_scores())
+        self.gameplayScreen.format_score(self.get_team_scores())
         # redisplay teams in new order
-        self.screen.update_teams(self.red_team, self.green_team)
+        self.gameplayScreen.update_teams(self.red_team, self.green_team)
