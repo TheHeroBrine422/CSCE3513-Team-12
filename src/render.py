@@ -3,6 +3,7 @@ from tkinter import *
 from SplashScreen import SplashScreen
 from EntryScreen import EntryScreen
 from GameplayScreen import GameplayScreen
+from Stage import Stage
 
 class RenderingManager(tk.Tk):
     def __init__(self, gameplayModel, networkingManager, databaseManager, *args, **kwargs):
@@ -52,11 +53,12 @@ class RenderingManager(tk.Tk):
         frame.tkraise()
         frame.on_show()
 
+    def start_game(self):
+        self.show_frame("GameplayScreen")
+        self.gameplayModel.set_game_state(Stage.STARTING)
+
     def get_frame(self, name):
         return self.frames[name]
-    
-    def change_game_state(self, state):
-        self.gameplayModel.set_game_state(state)
 
     def set_model_teams(self, green_team, red_team):
         self.gameplayModel.set_teams(green_team, red_team)

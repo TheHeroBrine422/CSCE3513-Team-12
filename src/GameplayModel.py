@@ -16,10 +16,10 @@ class GameplayModel():
         self.state = Stage.ENTER_TEAMS
         self.red_team_score = 0
         self.green_team_score = 0
-        self.state = Stage.STARTING
 
     def set_game_state(self, newState):
         self.state = newState
+        print("state is: " + self.state.name)
 
     def set_renderer(self, rm):
         self.renderingManager = rm

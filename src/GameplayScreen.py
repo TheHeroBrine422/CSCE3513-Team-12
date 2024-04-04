@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter.font import Font
 from Player import Player
+from Stage import Stage
 
 class GameplayScreen(tk.Frame):
     # Hex codes for colors
@@ -88,7 +89,7 @@ class GameplayScreen(tk.Frame):
 
     def on_show(self):
         # Start the countdown timer when the screen is shown
-        self.remaining_time = 6 * 60  # 6 minutes in seconds
+        self.remaining_time = 30   # 6 minutes in seconds
         self.update_timer()  # Start the countdown
 
     # add a hit message to hit stream
@@ -207,6 +208,10 @@ class GameplayScreen(tk.Frame):
             # update after a second
             self.after(1000, self.update_timer)
         # otherwise say game over
+        elif self.model.state == Stage.STARTING:
+            self.model.set_game_state(Stage.ACTIVE_GAME)
+            self.remaining_time = 360
+            self.update_timer()
         else:
             self.game_over_popup()
 

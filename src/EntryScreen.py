@@ -129,7 +129,6 @@ class EntryScreen(tk.Frame):
         # Center the Green Team table
         self.green_table_frame.pack(side=tk.TOP, pady=5)
 
-
     def on_button_click(self, button_number):
         if button_number == 5:
             self.start_game()
@@ -142,7 +141,6 @@ class EntryScreen(tk.Frame):
         if event.keysym.startswith("F") and event.keysym[1:].isdigit():
             button_number = int(event.keysym[1:])
             self.on_button_click(button_number)
-
 
     # Function to handle changes in the Entry widgets
     def on_entry_change(self, event, row, col, entry, team):
@@ -250,8 +248,7 @@ class EntryScreen(tk.Frame):
     # function to start game
     def start_game(self):
         self.export_players()
-        self.controller.show_frame("GameplayScreen")
-        self.controller.change_game_state(Stage.STARTING)
+        self.controller.start_game()
 
     def on_show(self):
         pass
