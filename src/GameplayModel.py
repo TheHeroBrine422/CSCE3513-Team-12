@@ -65,9 +65,11 @@ class GameplayModel():
         # If they're on different teams, firing player gets 10 pts
         if (firing_player.team != hit_player.team):
             firing_player.score += 10
+            self.networkingManager.send_broadcast(hit_player.equipment_id)
         # Otherwise firing player loses 10 pts
         else:
             firing_player.score -= 10
+            self.networkingManager.send_broadcast(firing_player.equipment_id)
 
         self.gameplayScreen.add_hit(firing_player, hit_player)
         self.sort_teams()
