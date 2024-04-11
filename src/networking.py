@@ -20,7 +20,7 @@ class NetworkingManager():
         self.gameplayModel = gameplayModel
 
     def send_broadcast(self, msg):
-        self.s.sendto(str.encode(msg), (self.BROADCAST_ADDRESS, self.BROADCAST_PORT))
+        self.s.sendto(str.encode(str(msg)), (self.BROADCAST_ADDRESS, self.BROADCAST_PORT))
         print("sent code: " + msg)
 
 
