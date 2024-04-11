@@ -68,13 +68,15 @@ class GameplayScreen(tk.Frame):
         # Create frames for the tables of the Red and Green Teams
         self.red_table_frame = tk.Frame(self.red_team_frame, bg=self.WHITE)
         self.red_table_frame.pack(side='left', padx=10, pady=5, anchor='w', fill='both', expand=True)
-        self.red_table_frame.grid_columnconfigure(0, weight=2)
-        self.red_table_frame.grid_columnconfigure(1, weight=1)
+        self.red_table_frame.grid_columnconfigure(0, weight=1)
+        self.red_table_frame.grid_columnconfigure(1, weight=3)
+        self.red_table_frame.grid_columnconfigure(2, weight=1)
 
         self.green_table_frame = tk.Frame(self.green_team_frame, bg=self.WHITE)
         self.green_table_frame.pack(side='left', padx=10, pady=5, anchor='w', fill='both', expand=True)
-        self.green_table_frame.grid_columnconfigure(0, weight=2)
-        self.green_table_frame.grid_columnconfigure(1, weight=1)
+        self.green_table_frame.grid_columnconfigure(0, weight=1)
+        self.green_table_frame.grid_columnconfigure(1, weight=3)
+        self.green_table_frame.grid_columnconfigure(2, weight=1)
 
         # Create frame for HIT STREAM in MIDDLE of screen
         self.hit_stream_frame = tk.Frame(self, bg=self.WHITE,padx=50)
@@ -152,25 +154,31 @@ class GameplayScreen(tk.Frame):
 
         # Add player names + scores, sorted by score
         for i in range(0, len(self.red_team)):
+            b_label = tk.Label(self.red_table_frame, text=u'\u212C', anchor='w', bg=self.WHITE, fg=self.WHITE, font=self.PLAYER_FONT)
+            b_label.grid(row=i, column=0, padx=(5, 0), pady=5, sticky='w')
+
             player_name = tk.Label(self.red_table_frame, text=self.red_team[i].name, anchor='w', bg=self.WHITE, fg=self.RED, font=self.PLAYER_FONT)
-            player_name.grid(row=i, column=0, padx=(5, 0), pady=5, sticky='w')
+            player_name.grid(row=i, column=1, padx=(5, 0), pady=5, sticky='w')
 
             player_score = tk.Label(self.red_table_frame, text=self.red_team[i].score, anchor='e', bg=self.WHITE, fg=self.RED, font=self.SCORE_FONT)
-            player_score.grid(row=i, column=1, padx=(5, 0), pady=5, sticky='e')
+            player_score.grid(row=i, column=2, padx=(5, 0), pady=5, sticky='e')
 
-            self.red_rows.append([player_name, player_score])
+            self.red_rows.append([b_label, player_name, player_score])
         
         # Center the Red Team table
         self.red_table_frame.pack(side=tk.TOP, pady=5, fill='both', expand=True)
 
         for i in range(0, len(self.green_team)):
+            b_label = tk.Label(self.green_table_frame, text=u'\u212C', anchor='w', bg=self.WHITE, fg=self.WHITE, font=self.PLAYER_FONT)
+            b_label.grid(row=i, column=0, padx=(5, 0), pady=5, sticky='w')
+
             player_name = tk.Label(self.green_table_frame, text=self.green_team[i].name, anchor='w', bg=self.WHITE, fg=self.GREEN, font=self.PLAYER_FONT)
-            player_name.grid(row=i, column=0, padx=(5, 0), pady=5, sticky='w')
+            player_name.grid(row=i, column=1, padx=(5, 0), pady=5, sticky='w')
 
             player_score = tk.Label(self.green_table_frame, text=self.green_team[i].score, anchor='e', bg=self.WHITE, fg=self.GREEN, font=self.SCORE_FONT)
-            player_score.grid(row=i, column=1, padx=(5, 0), pady=5, sticky='e')
+            player_score.grid(row=i, column=2, padx=(5, 0), pady=5, sticky='e')
 
-            self.green_rows.append([player_name, player_score])
+            self.green_rows.append([b_label, player_name, player_score])
         
         # Center the Green Team table
         self.green_table_frame.pack(side=tk.TOP, pady=5, fill='both', expand=True)
@@ -182,12 +190,16 @@ class GameplayScreen(tk.Frame):
 
         # Update player names + scores, sorted by score
         for i in range(0, len(self.red_team)):
-            self.red_rows[i][0].config(text = self.red_team[i].name)
-            self.red_rows[i][1].config(text = self.red_team[i].score)
+            if (self.red_team[i].got_base_hit):
+                self.red_rows[i][0].config(fg=self.RED)
+            self.red_rows[i][1].config(text = self.red_team[i].name)
+            self.red_rows[i][2].config(text = self.red_team[i].score)
 
         for i in range(0, len(self.green_team)):
-            self.green_rows[i][0].config(text = self.green_team[i].name)
-            self.green_rows[i][1].config(text = self.green_team[i].score)
+            if (self.green_team[i].got_base_hit):
+                self.green_rows[i][0].config(fg=self.GREEN)
+            self.green_rows[i][1].config(text = self.green_team[i].name)
+            self.green_rows[i][2].config(text = self.green_team[i].score)
 
     def format_score(self, scores):
         # set red score label text

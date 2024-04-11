@@ -91,10 +91,12 @@ class GameplayModel():
         if ((base_id == self.RED_TEAM_CODE) and (firing_player.team == 'green')):
             # player gets 100 pts
             firing_player.score += 100
+            firing_player.got_base_hit = True
         # Otherwise if the green base was hit AND the player is on the red team
         elif ((base_id == self.GREEN_TEAM_CODE) and (firing_player.team == 'red')):
             # player gets 100 pts
             firing_player.score += 100
+            firing_player.got_base_hit = True
 
         # add message on screen
         self.gameplayScreen.add_base_hit(firing_player, base_id)
