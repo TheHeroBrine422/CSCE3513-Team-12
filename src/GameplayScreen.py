@@ -154,7 +154,7 @@ class GameplayScreen(tk.Frame):
 
         # Add player names + scores, sorted by score
         for i in range(0, len(self.red_team)):
-            b_label = tk.Label(self.red_table_frame, text=u'\u212C', anchor='w', bg=self.WHITE, fg=self.WHITE, font=self.PLAYER_FONT)
+            b_label = tk.Label(self.red_table_frame, text=u'\u24B7', anchor='w', bg=self.WHITE, fg=self.WHITE, font=self.PLAYER_FONT)
             b_label.grid(row=i, column=0, padx=(5, 0), pady=5, sticky='w')
 
             player_name = tk.Label(self.red_table_frame, text=self.red_team[i].name, anchor='w', bg=self.WHITE, fg=self.RED, font=self.PLAYER_FONT)
@@ -169,7 +169,7 @@ class GameplayScreen(tk.Frame):
         self.red_table_frame.pack(side=tk.TOP, pady=5, fill='both', expand=True)
 
         for i in range(0, len(self.green_team)):
-            b_label = tk.Label(self.green_table_frame, text=u'\u212C', anchor='w', bg=self.WHITE, fg=self.WHITE, font=self.PLAYER_FONT)
+            b_label = tk.Label(self.green_table_frame, text=u'\u24B7', anchor='w', bg=self.WHITE, fg=self.WHITE, font=self.PLAYER_FONT)
             b_label.grid(row=i, column=0, padx=(5, 0), pady=5, sticky='w')
 
             player_name = tk.Label(self.green_table_frame, text=self.green_team[i].name, anchor='w', bg=self.WHITE, fg=self.GREEN, font=self.PLAYER_FONT)
