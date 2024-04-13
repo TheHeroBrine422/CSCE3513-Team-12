@@ -1,4 +1,7 @@
 import tkinter as tk
+import random
+import pygame
+import os
 from tkinter.font import Font
 from Player import Player
 from Stage import Stage
@@ -18,6 +21,7 @@ class GameplayScreen(tk.Frame):
 
     def __init__(self, parent, controller, model):
         tk.Frame.__init__(self, parent, bg='black')
+        pygame.mixer.init()
         self.controller = controller
         self.model = model
         self.red_team = [] # list of Player objects
@@ -219,6 +223,8 @@ class GameplayScreen(tk.Frame):
         if self.remaining_time > 0:
             # decrement
             self.remaining_time -= 1
+            if self.model.state == Stage.STARTING and self.remaining_time == 16:
+                self.play_photon_track()
             # update after a second
             self.after(1000, self.update_timer)
         # otherwise say game over
@@ -264,3 +270,17 @@ class GameplayScreen(tk.Frame):
         # Clear the lists holding the labels
         self.red_rows = []
         self.green_rows = []
+    
+    def play_photon_track(self):
+        PHOTON_TRACKS_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'photon_tracks'))
+        # List available tracks
+        tracks = [track for track in os.listdir(PHOTON_TRACKS_FOLDER) if os.path.isfile(os.path.join(PHOTON_TRACKS_FOLDER, track))]
+        # Select a random track
+        random.shuffle(tracks)
+        track_name = tracks[0]
+        # Construct the path to the selected track
+        track_path = os.path.join(PHOTON_TRACKS_FOLDER, track_name)
+        # Load and play the track
+        print(f"Playing track: {track_name}")
+        pygame.mixer.music.load(track_path)
+        pygame.mixer.music.play()
