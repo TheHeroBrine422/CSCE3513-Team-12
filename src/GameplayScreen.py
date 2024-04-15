@@ -29,6 +29,7 @@ class GameplayScreen(tk.Frame):
         self.hit_stream_texts = [] # list of Texts to display messages
         self.red_rows = [] # list of lists of Labels
         self.green_rows = [] # list of lists of Labels
+        self.flash_color = self.WHITE # sets flash color for text
 
         self.HEADER_FONT = Font(self.controller, family='Helvetica', size=48, weight='bold')
         self.PLAYER_FONT = Font(self.controller, family='Helvetica', size=24, weight='bold')
@@ -95,10 +96,35 @@ class GameplayScreen(tk.Frame):
         self.timer_label = tk.Label(self.timer_frame, text="6:00", font=self.HEADER_FONT, bg=self.GRAY, fg=self.WHITE)
         self.timer_label.pack()
 
+    def flash_highest_score(self):
+        # Finds highest team score
+        highest_score = max(self.red_team[0].score, self.green_team[0].score)
+
+        # Starts flash only if team scores not 0
+        if highest_score != 0:
+            if highest_score == self.red_team[0].score:
+                red_highest = True
+                team_score_label = self.red_team_score_label
+            else:
+                red_highest = False
+                team_score_label = self.green_team_score_label
+            
+            team_score_label.config(fg=self.flash_color)
+
+            # Changes flash colors depending on which team has highest score
+            if red_highest:
+                self.flash_color = self.WHITE if self.flash_color != self.WHITE else self.RED
+            else:
+                self.flash_color = self.WHITE if self.flash_color != self.WHITE else self.GREEN
+
+            # Flash every 500ms
+            self.after(500, self.flash_highest_score)
+
     def on_show(self):
         # Start the countdown timer when the screen is shown
         self.remaining_time = self.STARTUP_LENGTH   # starting timer
         self.update_timer()  # Start the countdown
+        self.after(self.STARTUP_LENGTH * 1000, self.flash_highest_score) # starts flashing team score after 30s timer
 
     # add a hit message to hit stream
     def add_hit(self, fired, hit):
