@@ -117,8 +117,8 @@ class GameplayScreen(tk.Frame):
             else:
                 self.flash_color = self.WHITE if self.flash_color != self.WHITE else self.GREEN
 
-            # Flash every 500ms
-            self.after(500, self.flash_highest_score)
+        # Flash every 500ms
+        self.after(500, self.flash_highest_score)
 
     def on_show(self):
         # Start the countdown timer when the screen is shown
