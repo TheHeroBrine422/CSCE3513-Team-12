@@ -36,18 +36,27 @@ class GameplayScreen(tk.Frame):
         self.SCORE_FONT = Font(self.controller, family='Helvetica', size=24)
 
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=3)
-        self.grid_rowconfigure(1, weight=2)
-        self.grid_rowconfigure(2, weight=1)
+        # row for team scores w/ header
+        self.grid_rowconfigure(0, weight=5, uniform=0)
+        # row for hit stream
+        self.grid_rowconfigure(1, weight=3, uniform=0)
+        # row for timer
+        self.grid_rowconfigure(2, weight=1, uniform=0)
 
         # Create frame for player SCORES on TOP of screen
         score_frame = tk.Frame(self, bg='black')
         score_frame.grid(row=0, column=0, sticky='nsew')
+        # header row
         score_frame.grid_rowconfigure(0, weight=1)
+        # team players row
         score_frame.grid_rowconfigure(1, weight=5)
+        # col for red team name
         score_frame.grid_columnconfigure(0, weight=1)
+        # col for red team score
         score_frame.grid_columnconfigure(1, weight=1)
+        # col green team name
         score_frame.grid_columnconfigure(2, weight=1)
+        # col for green team score
         score_frame.grid_columnconfigure(3, weight=1)
 
         # Create labels for the Red and Green Teams
@@ -63,7 +72,7 @@ class GameplayScreen(tk.Frame):
         self.green_team_score_label = tk.Label(score_frame, text="0", font=self.HEADER_FONT, bg=self.WHITE, fg=self.GREEN)
         self.green_team_score_label.grid(row=0, column=3, padx=5, pady=5, sticky='nsew')
 
-        # Create frame for each team
+        # Create frame for each team's players
         self.red_team_frame = tk.Frame(score_frame, bd=2, relief=tk.GROOVE, bg=self.WHITE)
         self.red_team_frame.grid(row=1, column=0, padx=5, pady=5, columnspan=2, sticky='nsew')
 
@@ -73,52 +82,64 @@ class GameplayScreen(tk.Frame):
         # Create frames for the tables of the Red and Green Teams
         self.red_table_frame = tk.Frame(self.red_team_frame, bg=self.WHITE)
         self.red_table_frame.pack(side='left', padx=10, pady=5, anchor='w', fill='both', expand=True)
+        # stylized b col
         self.red_table_frame.grid_columnconfigure(0, weight=1)
+        # player name col
         self.red_table_frame.grid_columnconfigure(1, weight=3)
+        # player score col
         self.red_table_frame.grid_columnconfigure(2, weight=1)
 
         self.green_table_frame = tk.Frame(self.green_team_frame, bg=self.WHITE)
         self.green_table_frame.pack(side='left', padx=10, pady=5, anchor='w', fill='both', expand=True)
+        # stylized b col
         self.green_table_frame.grid_columnconfigure(0, weight=1)
+        # player name col
         self.green_table_frame.grid_columnconfigure(1, weight=3)
+        # player score col
         self.green_table_frame.grid_columnconfigure(2, weight=1)
 
         # Create frame for HIT STREAM in MIDDLE of screen
         self.hit_stream_frame = tk.Frame(self, bg=self.WHITE,padx=50)
         self.hit_stream_frame.grid(row=1, column=0, sticky='nsew')
         self.hit_stream_frame.grid_columnconfigure(0, weight=1)
+        self.hit_stream_frame.grid_rowconfigure(0, weight=1, uniform=1)
+        self.hit_stream_frame.grid_rowconfigure(1, weight=1, uniform=1)
+        self.hit_stream_frame.grid_rowconfigure(2, weight=1, uniform=1)
+        self.hit_stream_frame.grid_rowconfigure(3, weight=1, uniform=1)
+        self.hit_stream_frame.grid_rowconfigure(4, weight=1, uniform=1)
 
         # Create frame for TIMER beneath HIT STREAM
         self.timer_frame = tk.Frame(self, bg=self.GRAY)
-        self.timer_frame.grid(row=2, column=0, sticky='sew')
+        self.timer_frame.grid(row=2, column=0, sticky='nsew')
 
         # create timer label, but don't start the timer yet
         self.timer_label = tk.Label(self.timer_frame, text="6:00", font=self.HEADER_FONT, bg=self.GRAY, fg=self.WHITE)
-        self.timer_label.pack()
+        self.timer_label.pack(expand=True)
 
     def flash_highest_score(self):
-        # Finds highest team score
-        highest_score = max(self.red_team[0].score, self.green_team[0].score)
+        if (self.model.state == Stage.ACTIVE_GAME):
+            # Finds highest team score
+            highest_score = max(self.red_team[0].score, self.green_team[0].score)
 
-        # Starts flash only if team scores not 0
-        if highest_score != 0:
-            if highest_score == self.red_team[0].score:
-                red_highest = True
-                team_score_label = self.red_team_score_label
-            else:
-                red_highest = False
-                team_score_label = self.green_team_score_label
-            
-            team_score_label.config(fg=self.flash_color)
+            # Starts flash only if team scores not 0
+            if highest_score != 0:
+                if highest_score == self.red_team[0].score:
+                    red_highest = True
+                    team_score_label = self.red_team_score_label
+                else:
+                    red_highest = False
+                    team_score_label = self.green_team_score_label
+                
+                team_score_label.config(fg=self.flash_color)
 
-            # Changes flash colors depending on which team has highest score
-            if red_highest:
-                self.flash_color = self.WHITE if self.flash_color != self.WHITE else self.RED
-            else:
-                self.flash_color = self.WHITE if self.flash_color != self.WHITE else self.GREEN
+                # Changes flash colors depending on which team has highest score
+                if red_highest:
+                    self.flash_color = self.WHITE if self.flash_color != self.WHITE else self.RED
+                else:
+                    self.flash_color = self.WHITE if self.flash_color != self.WHITE else self.GREEN
 
-        # Flash every 500ms
-        self.after(500, self.flash_highest_score)
+            # Flash every 500ms
+            self.after(500, self.flash_highest_score)
 
     def on_show(self):
         # Start the countdown timer when the screen is shown
@@ -175,7 +196,7 @@ class GameplayScreen(tk.Frame):
             # if we haven't run out of messages to display
             if (i < len(self.hit_stream_texts)):
                 # display the message
-                self.hit_stream_texts[i].grid(row=i, column=0, padx=(5, 0), pady=5, sticky='new')
+                self.hit_stream_texts[i].grid(row=i, column=0, padx=(5, 0), pady=5, sticky='nsew')
 
     def set_teams(self, red, green):
         # Sort the teams by player score

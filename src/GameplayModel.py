@@ -65,10 +65,12 @@ class GameplayModel():
         # If they're on different teams, firing player gets 10 pts
         if (firing_player.team != hit_player.team):
             firing_player.score += 10
+            # deactivate hit player equipment
             self.networkingManager.send_broadcast(hit_player.equipment_id)
         # Otherwise firing player loses 10 pts
         else:
             firing_player.score -= 10
+            # deactivate firing player equipment
             self.networkingManager.send_broadcast(firing_player.equipment_id)
 
         self.gameplayScreen.add_hit(firing_player, hit_player)
@@ -98,6 +100,8 @@ class GameplayModel():
             firing_player.score += 100
             firing_player.got_base_hit = True
 
+        # broadcast -1 to keep traffic generator going
+        self.networkingManager.send_broadcast(-1)
         # add message on screen
         self.gameplayScreen.add_base_hit(firing_player, base_id)
         # resort teams

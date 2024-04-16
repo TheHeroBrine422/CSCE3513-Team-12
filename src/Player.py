@@ -5,3 +5,6 @@ class Player():
         self.team = player_team
         self.score = player_score
         self.got_base_hit = player_got_base_hit
+
+    def toString(self):
+        return ("name: " + self.name + " equip_id: " + str(self.equipment_id) + " team: " + self.team)

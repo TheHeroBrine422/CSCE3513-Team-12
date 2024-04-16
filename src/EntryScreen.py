@@ -6,6 +6,7 @@ class EntryScreen(tk.Frame):
     def __init__(self, parent, controller):
 
         self.controller = controller
+        self.TEAM_SIZE = 15
 
         # Hex codes for colors
         self.PURPLE = '#4f62c4'
@@ -13,13 +14,6 @@ class EntryScreen(tk.Frame):
         self.GREEN = '#093b15'
         self.GRAY = "#222222"
         self.WHITE = "#d9d9d9"
-
-        self.red_team = [] # todo: this data should *probably* be part of the gameState variable which is passed from main to render, but not to this class, for now im just doing it like this though.
-        self.green_team = []
-        for _ in range(20):
-            self.red_team.append({"uniqueID": -1, "codename": "", "equipmentID": -1})
-            self.green_team.append({"uniqueID": -1, "codename": "", "equipmentID": -1})
-
 
         tk.Frame.__init__(self, parent, bg=self.GRAY)
 
@@ -88,7 +82,7 @@ class EntryScreen(tk.Frame):
         column2_label_red.grid(row=0, column=3, padx=(5, 0), pady=5)
 
         self.entries_red = []
-        for i in range(1, 16):
+        for i in range(1, self.TEAM_SIZE + 1):
             row_label = tk.Label(self.red_table_frame, text=f"{i}.", font = ("Helvetica", 15), width=3, anchor="w", bg=self.RED, fg=self.WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
@@ -114,7 +108,7 @@ class EntryScreen(tk.Frame):
 
         # Create 15x3 tables with Entry widgets and row numbers for the Green Team
         self.entries_green = []
-        for i in range(1, 16):
+        for i in range(1, self.TEAM_SIZE + 1):
             row_label = tk.Label(self.green_table_frame, text=f"{i}.", font = ("Helvetica", 15), width=3, anchor="w", bg=self.GREEN, fg=self.WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
@@ -155,100 +149,93 @@ class EntryScreen(tk.Frame):
             # if it's red team...
             if team == 'red':
                 self.entries_red[row-1][col].delete(0, tk.END) # This clears the codename field before we insert the ID's codename so they dont stack
-                # store unique id
-                self.red_team[row-1]["uniqueID"] = value
                 # if a codename was retrieved from database
                 if codename is not None:
-                    # store codename
-                    self.red_team[row - 1]["codename"] = codename
                     # put string in entry field
                     self.entries_red[row-1][col].insert(0, codename)
             if team == 'green':
                 self.entries_green[row-1][col].delete(0, tk.END)
-                # store unique id
-                self.green_team[row - 1]["uniqueID"] = value
                 # if a codename was retrieved from database
                 if codename is not None:
-                    # store codename
-                    self.green_team[row - 1]["codename"] = codename
                     # put string in entry field
                     self.entries_green[row-1][col].insert(0, codename)
         # else if they're changing codename
         elif col == 2:
-            self.tempUniqueID = "" # dealing with weird local variable issue.
             # if it's red team
             if team == 'red':
-                # store/update codename var
-                self.red_team[row - 1]["codename"] = value
-                # store/update unique id
-                self.tempUniqueID = self.red_team[row - 1]["uniqueID"]
-                # otherwise it's green team
+                tempUniqueID = self.entries_red[row - 1][0].get()
             else:
-                # store/update codename var
-                self.green_team[row - 1]["codename"] = value
-                # store/update unique id
-                self.tempUniqueID = self.green_team[row - 1]["uniqueID"]
+                tempUniqueID = self.entries_green[row - 1][0].get()
             # retrieve player from database by id
-            codename = self.controller.databaseManager.getPlayer(self.tempUniqueID)
+            codename = self.controller.databaseManager.getPlayer(tempUniqueID)
             if codename is None:    # If the codename is none then this ID hasn't been registered yet, so we add them.
-                self.controller.databaseManager.addPlayer(self.tempUniqueID, value)
+                self.controller.databaseManager.addPlayer(tempUniqueID, value)
             else:   # else, we update with the new name
-                self.controller.databaseManager.updatePlayer(self.tempUniqueID, value)
-        # else if they're updating equip id
-        elif col == 3:
-            # if team is red
-            if team == 'red':
-                # store equip id
-                self.red_team[row - 1]["equipmentID"] = value
-            # otherwise it's green team
-            else:
-                # store equip id
-                self.green_team[row - 1]["equipmentID"] = value
-            # notify networkingManager that equipment with id is in use
-            self.controller.networkingManager.send_broadcast(value)
-        #print(f"Value in row {row}, column {col} changed to: {value}")
+                self.controller.databaseManager.updatePlayer(tempUniqueID, value)
 
     # go through tables and creates a list of Player objects for each team and sends it to renderingManager
     def export_players(self):
         red_team_out = []
         green_team_out = []
+        can_submit = True
 
-        for i in range(20):
-            red_player_data = self.red_team[i]
-            green_player_data = self.green_team[i]
+        for i in range(self.TEAM_SIZE):
+            entry_unique_id = self.entries_red[i][0].get()
+            entry_codename = self.entries_red[i][1].get()
+            entry_equip_id = self.entries_red[i][2].get()
 
-            # Check if the player data is valid (uniqueID and codename are not empty)
-            if red_player_data["uniqueID"] != "" and red_player_data["codename"]:
-                red_team_out.append(Player(str(red_player_data["codename"]), int(red_player_data["equipmentID"]), 'red'))
+            if entry_codename != "" and entry_equip_id != "":
+                red_team_out.append(Player(entry_codename, int(entry_equip_id), 'red'))
+                self.controller.networkingManager.send_broadcast(entry_equip_id)
+            elif not (entry_codename == "" and entry_equip_id == "" and entry_unique_id == ""):
+                can_submit = False
 
-            if green_player_data["uniqueID"] != "" and green_player_data["codename"]:
-                green_team_out.append(Player(str(green_player_data["codename"]), int(green_player_data["equipmentID"]), 'green'))
+            entry_unique_id = self.entries_green[i][0].get()
+            entry_codename = self.entries_green[i][1].get()
+            entry_equip_id = self.entries_green[i][2].get()
 
-        self.controller.set_model_teams(green_team_out, red_team_out)
+            if entry_codename != "" and entry_equip_id != "":
+                green_team_out.append(Player(entry_codename, int(entry_equip_id), 'green'))
+                self.controller.networkingManager.send_broadcast(entry_equip_id)
+            elif not (entry_codename == "" and entry_equip_id == "" and entry_unique_id == ""):
+                can_submit = False
+
+        if can_submit:
+            self.controller.set_model_teams(green_team_out, red_team_out)
+        
+        return can_submit
 
     # function to clear all entries
     def clear_entries(self):
-        for i in range(20):
+        for i in range(self.TEAM_SIZE):
             for j in range(1, 4):
                 # Clears the entry table
                 self.entries_red[i][j-1].delete(0, tk.END)
                 self.entries_green[i][j-1].delete(0, tk.END)
 
-                # Sets red and green team values back to default
-                if j == 1:
-                    self.red_team[i]["uniqueID"] = -1  
-                    self.green_team[i]["uniqueID"] = -1
-                elif j == 2:
-                    self.red_team[i]["codename"] = ""
-                    self.green_team[i]["codename"] = ""
-                elif j == 3:
-                    self.red_team[i]["equipmentID"] = -1
-                    self.green_team[i]["equipmentID"] = -1
-
     # function to start game
     def start_game(self):
-        self.export_players()
-        self.controller.start_game()
+        can_start = self.export_players()
+        if can_start:
+            self.controller.start_game()
+        else:
+            self.build_error_popup()
+
+    # Function to display the error popup
+    def build_error_popup(self):
+        self.popup_frame = tk.Frame(self, bg=self.WHITE, bd=5, relief=tk.SOLID, highlightbackground="yellow", highlightthickness=5)
+        self.popup_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        error_msg = "There was an error filling out the teams. Please make sure all players have all entries filled."
+        label = tk.Label(self.popup_frame, text=error_msg, bg=self.WHITE, fg=self.RED)
+        label.pack(pady=20)
+
+        btn_quit = tk.Button(self.popup_frame, text="Return to Player Entry", command=self.close_popup, bg=self.WHITE, fg=self.RED)
+        btn_quit.pack(pady=10)
+
+    def close_popup(self):
+        if hasattr(self, "popup_frame") and self.popup_frame:
+            self.popup_frame.destroy()
 
     def on_show(self):
         pass

@@ -21,7 +21,7 @@ class NetworkingManager():
 
     def send_broadcast(self, msg):
         self.s.sendto(str.encode(str(msg)), (self.BROADCAST_ADDRESS, self.BROADCAST_PORT))
-        print("sent code: " + msg)
+        print("sent code: " + str(msg))
 
 
     def tick(self):
@@ -34,9 +34,9 @@ class NetworkingManager():
             sendingEquipID = data[0]
             hitEquipID = data[1]
             if hitEquipID == "53" or hitEquipID == "43":
-                self.gameplayModel.base_hit(sendingEquipID, hitEquipID)
+                self.gameplayModel.base_hit(int(sendingEquipID), int(hitEquipID))
             else:
-                self.gameplayModel.shots_fired(sendingEquipID, hitEquipID)
+                self.gameplayModel.shots_fired(int(sendingEquipID), int(hitEquipID))
         except BlockingIOError: # this occurs when s.recvfrom tries to get data and cant find any data. this isn't a error to be worried about because that just means none of the laser tag units sent any data to the server.
             pass
         except ConnectionResetError: # this means that there was no server it could connect to which is fine, just means none of the laser tag units are on.
