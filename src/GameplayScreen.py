@@ -118,12 +118,13 @@ class GameplayScreen(tk.Frame):
 
     def flash_highest_score(self):
         if (self.model.state == Stage.ACTIVE_GAME):
-            # Finds highest team score
-            highest_score = max(self.red_team[0].score, self.green_team[0].score)
+            # get teams' total scores from model
+            team_scores = self.model.get_team_scores()
 
-            # Starts flash only if team scores not 0
-            if highest_score != 0:
-                if highest_score == self.red_team[0].score:
+            # Starts flash only if both team scores are not 0
+            if team_scores[0] != 0 and team_scores[1] != 0:
+                # if red team has higher score
+                if team_scores[0] > team_scores[1]:
                     red_highest = True
                     team_score_label = self.red_team_score_label
                 else:

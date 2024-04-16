@@ -130,7 +130,6 @@ class EntryScreen(tk.Frame):
             self.clear_entries()
             
     def on_key_press(self, event):
-        print("Key pressed:", event.keysym)
         # Check if the pressed key is a function key (F1, F2, ..., F8)
         if event.keysym.startswith("F") and event.keysym[1:].isdigit():
             button_number = int(event.keysym[1:])
@@ -184,23 +183,35 @@ class EntryScreen(tk.Frame):
             entry_codename = self.entries_red[i][1].get()
             entry_equip_id = self.entries_red[i][2].get()
 
+            # if there is a codename and an equipment id...
             if entry_codename != "" and entry_equip_id != "":
+                # create a red Player
                 red_team_out.append(Player(entry_codename, int(entry_equip_id), 'red'))
+                # notify networkingManager that equip id is in use
                 self.controller.networkingManager.send_broadcast(entry_equip_id)
+            # otherwise, if the row is NOT COMPLETELY empty... (i.e. there might be an equip id but no codename)
             elif not (entry_codename == "" and entry_equip_id == "" and entry_unique_id == ""):
+                # don't let user submit
                 can_submit = False
 
             entry_unique_id = self.entries_green[i][0].get()
             entry_codename = self.entries_green[i][1].get()
             entry_equip_id = self.entries_green[i][2].get()
 
+            # if there is a codename and an equipment id...
             if entry_codename != "" and entry_equip_id != "":
+                # create a green Player
                 green_team_out.append(Player(entry_codename, int(entry_equip_id), 'green'))
+                # notify networkingManager that equip id is in use
                 self.controller.networkingManager.send_broadcast(entry_equip_id)
+            # otherwise, if the row is NOT COMPLETELY empty... (i.e. there might be an equip id but no codename)
             elif not (entry_codename == "" and entry_equip_id == "" and entry_unique_id == ""):
+                # don't let user submit
                 can_submit = False
 
+        # if the user can submit (all player entries are fully filled out)
         if can_submit:
+            # set the model's teams
             self.controller.set_model_teams(green_team_out, red_team_out)
         
         return can_submit
