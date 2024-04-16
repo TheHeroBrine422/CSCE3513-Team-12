@@ -138,8 +138,8 @@ class GameplayScreen(tk.Frame):
                 else:
                     self.flash_color = self.WHITE if self.flash_color != self.WHITE else self.GREEN
 
-            # Flash every 500ms
-            self.after(500, self.flash_highest_score)
+        # Flash every 500ms
+        self.after(500, self.flash_highest_score)
 
     def on_show(self):
         # Start the countdown timer when the screen is shown
@@ -156,10 +156,12 @@ class GameplayScreen(tk.Frame):
         hit_text.tag_add('p2', 'end -2 chars wordstart', tk.END)
         if fired.team == 'red':
             hit_text.tag_config('p1', foreground=self.RED)
-            hit_text.tag_config('p2', foreground=self.GREEN)
         else:
             hit_text.tag_config('p1', foreground=self.GREEN)
+        if hit.team == 'red':
             hit_text.tag_config('p2', foreground=self.RED)
+        else:
+            hit_text.tag_config('p2', foreground=self.GREEN)
         hit_text.configure(state=tk.DISABLED)
         self.hit_stream_texts.append(hit_text)
         if (len(self.hit_stream_texts) > self.HIT_STREAM_MAX):

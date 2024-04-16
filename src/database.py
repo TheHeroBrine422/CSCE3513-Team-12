@@ -17,7 +17,7 @@ class DatabaseManager():
 
     def getPlayer(self, id):
         existing_player, error = self.supabase.table('Players').select('*').eq('id', id).execute()
-        if error and not (error[0] == 'count' and error[1] is None):
+        if not (error[0] == 'count' and error[1] is None):
             print(f"Error: {error}")
             return None
         if len(existing_player[1]) > 0:
@@ -29,12 +29,12 @@ class DatabaseManager():
     def updatePlayer(self, player_id, new_codename):
         try:
             existing_player, error = self.supabase.table('Players').select('*').eq('id', player_id).execute()
-            if error and not (error[0] == 'count' and error[1] is None):
+            if not (error[0] == 'count' and error[1] is None):
                 print(f"Error: {error}")
             elif existing_player[1]:
                 # Player found, update the codename
                 _, update_error = self.supabase.table('Players').update({'codename': new_codename}).eq('id', player_id).execute()
-                if update_error:
+                if not (update_error[0] == 'count' and update_error[1] is None):
                     print(f"Error updating player: {update_error}")
                 else:
                     print(f"Player {player_id} - Codename updated to {new_codename}")
@@ -46,20 +46,20 @@ class DatabaseManager():
     def addPlayer(self, id, codename):
         # Check to see if the player already exists
         existing_player, error = self.supabase.table('Players').select('*').eq('id', id).execute()
-        if error and not (error[0] == 'count' and error[1] is None):
+        if not (error[0] == 'count' and error[1] is None):
             print(f"Error: {error}")
         elif len(existing_player[1]) > 0:
             print(f"Player already exists: {existing_player}")
         else:
             data, error2 = self.supabase.table('Players').insert([{'id': id, 'codename': codename}]).execute()
-            if error2:
+            if not (error2[0] == 'count' and error2[1] is None):
                 print(f"Error: {error}")
             else:
                 print(f"Player {id} - {codename} added successfully")
                 
     def clearTable(self):
         data, error = self.supabase.table('Players').delete().execute()
-        if error:
+        if not (error[0] == 'count' and error[1] is None):
             print(f"Error: {error}")
         else:
             print(f"Table cleared successfully")
