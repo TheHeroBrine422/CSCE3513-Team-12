@@ -303,6 +303,8 @@ class GameplayScreen(tk.Frame):
         # Clear player names and scores
         self.clear_teams()
         self.model.reset()
+        # Stop playing music
+        pygame.mixer.music.stop()
         # Call the show_frame method of the controller (RenderingManager) to switch to the entry screen
         self.controller.show_frame("EntryScreen")
 
