@@ -30,6 +30,7 @@ class GameplayScreen(tk.Frame):
         self.red_rows = [] # list of lists of Labels
         self.green_rows = [] # list of lists of Labels
         self.flash_color = self.WHITE # sets flash color for text
+        parent.bind_all('q', self.game_over_popup)
 
         self.HEADER_FONT = Font(self.controller, family='Helvetica', size=48, weight='bold')
         self.PLAYER_FONT = Font(self.controller, family='Helvetica', size=24, weight='bold')
@@ -143,6 +144,8 @@ class GameplayScreen(tk.Frame):
         self.after(500, self.flash_highest_score)
 
     def on_show(self):
+        if hasattr(self, "popup_frame") and self.popup_frame:
+            self.popup_frame.destroy()
         # Start the countdown timer when the screen is shown
         self.remaining_time = self.STARTUP_LENGTH   # starting timer
         self.update_timer()  # Start the countdown
@@ -270,7 +273,7 @@ class GameplayScreen(tk.Frame):
         # set label text
         self.timer_label.config(text=f"{minutes:02}:{seconds:02}")
         # if we still have more time (i.e. more than 0 seconds left)
-        if self.remaining_time > 0:
+        if self.remaining_time > 0 and self.model.state != Stage.FINISHED:
             # decrement
             self.remaining_time -= 1
             if self.model.state == Stage.STARTING and self.remaining_time == 16:
@@ -283,11 +286,13 @@ class GameplayScreen(tk.Frame):
             self.remaining_time = self.GAME_LENGTH
             self.update_timer()
         else:
-            self.model.end_game()
             self.game_over_popup()
 
     # Function to display the "Game Over" popup
-    def game_over_popup(self):
+    def game_over_popup(self, event = None):
+        if hasattr(self, "popup_frame") and self.popup_frame:
+            self.popup_frame.destroy()
+        self.model.end_game()
         self.popup_frame = tk.Frame(self, bg=self.WHITE, bd=5, relief=tk.SOLID, highlightbackground="yellow", highlightthickness=5)
         self.popup_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
