@@ -54,6 +54,8 @@ class RenderingManager(tk.Tk):
         frame.on_show()
 
     def start_game(self):
+        if hasattr(self.frames["GameplayScreen"], "popup_frame") and self.frames["GameplayScreen"].popup_frame:
+            self.frames["GameplayScreen"].popup_frame.destroy()
         self.show_frame("GameplayScreen")
         self.gameplayModel.set_game_state(Stage.STARTING)
 
