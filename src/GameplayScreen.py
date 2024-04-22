@@ -123,22 +123,21 @@ class GameplayScreen(tk.Frame):
             team_scores = self.model.get_team_scores()
 
             # Starts flash only if both team scores are not 0
-            if team_scores[0] != 0 and team_scores[1] != 0:
+            if team_scores[0] != 0 or team_scores[1] != 0:
                 # if red team has higher score
-                if team_scores[0] > team_scores[1]:
-                    red_highest = True
-                    team_score_label = self.red_team_score_label
-                else:
-                    red_highest = False
-                    team_score_label = self.green_team_score_label
-                
-                team_score_label.config(fg=self.flash_color)
-
-                # Changes flash colors depending on which team has highest score
-                if red_highest:
+                if team_scores[0] > team_scores[1]: 
+                    self.red_team_score_label.config(fg=self.flash_color)
+                    self.green_team_score_label.config(fg=self.GREEN)
                     self.flash_color = self.WHITE if self.flash_color != self.WHITE else self.RED
-                else:
+                # if green team has higher score
+                elif team_scores[0] < team_scores[1]: 
+                    self.green_team_score_label.config(fg=self.flash_color)
+                    self.red_team_score_label.config(fg=self.RED)
                     self.flash_color = self.WHITE if self.flash_color != self.WHITE else self.GREEN
+                # if both are equal 
+                else:
+                    self.red_team_score_label.config(fg=self.RED)
+                    self.green_team_score_label.config(fg=self.GREEN)
 
         # Flash every 500ms
         self.after(500, self.flash_highest_score)
@@ -286,6 +285,10 @@ class GameplayScreen(tk.Frame):
             self.remaining_time = self.GAME_LENGTH
             self.update_timer()
         else:
+            # ensures no score is white when game's over
+            self.red_team_score_label.config(fg=self.RED)
+            self.green_team_score_label.config(fg=self.GREEN)
+            
             self.game_over_popup()
 
     # Function to display the "Game Over" popup
