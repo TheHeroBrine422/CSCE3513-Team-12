@@ -2,6 +2,7 @@ from networking import NetworkingManager
 from render import RenderingManager
 from database import DatabaseManager
 from GameplayModel import GameplayModel
+from Stage import Stage
 
 gameplayModel = GameplayModel()
 
@@ -12,6 +13,6 @@ gameplayModel.set_networker(networkingManager)
 renderingManager = RenderingManager(gameplayModel, networkingManager, databaseManager)
 gameplayModel.set_renderer(renderingManager)
 
-while gameplayModel.running:
+while gameplayModel.state != Stage.PROGRAM_QUIT:
     networkingManager.tick()
     renderingManager.tick()

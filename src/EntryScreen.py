@@ -1,6 +1,5 @@
 import tkinter as tk
 from Player import Player
-from Stage import Stage
 
 class EntryScreen(tk.Frame):
     def __init__(self, parent, controller):
@@ -10,15 +9,15 @@ class EntryScreen(tk.Frame):
 
         # Hex codes for colors
         self.PURPLE = '#4f62c4'
-        self.RED = '#450c19'
-        self.GREEN = '#093b15'
+        self.RED = '#ad1c3d'
+        self.GREEN = '#169c36'
         self.GRAY = "#222222"
-        self.WHITE = "#d9d9d9"
+        self.WHITE = "#ededed"
 
         tk.Frame.__init__(self, parent, bg=self.GRAY)
 
         # Create a header label
-        header_label = tk.Label(self, text="Edit Current Game", font=("Helvetica", 20, "bold"), fg = self.PURPLE, bg=self.GRAY)
+        header_label = tk.Label(self, text="Edit Current Game", font=("Silom", 32, "bold"), fg = self.PURPLE, bg=self.GRAY)
         header_label.pack(side=tk.TOP, pady=10)
 
         # Create 8 buttons
@@ -27,7 +26,7 @@ class EntryScreen(tk.Frame):
 
         buttons = []
         labels = [
-            "",
+            "Quit Program",
             "",
             "",
             "",
@@ -38,12 +37,13 @@ class EntryScreen(tk.Frame):
         ]
         for i, label in enumerate(labels, start=1):
             # Use function key labels (F1, F2, ..., F8) along with the specified labels
-            button = tk.Button(buttons_frame, text=f"F{i}\n{label}", command=lambda i=i: self.on_button_click(i))
+            button = tk.Button(buttons_frame, text=f"F{i}\n{label}", font=('Silom', 12))
             button.pack(side=tk.LEFT, padx=5, pady=5, fill=tk.X, expand=True)
             buttons.append(button)
 
         # Bind all key events globally
         self.master.bind_all("<KeyPress>", self.on_key_press)
+        buttons[0].config(command=self.quit)
         buttons[4].config(command=self.start_game)
         buttons[7].config(command=self.clear_entries)
 
@@ -51,17 +51,17 @@ class EntryScreen(tk.Frame):
         teams_frame = tk.Frame(self, bg=self.GRAY)
         teams_frame.pack(side=tk.TOP)
 
-        self.red_team_frame = tk.Frame(teams_frame, bd=2, relief=tk.GROOVE, bg=self.RED)
+        self.red_team_frame = tk.Frame(teams_frame, bd=2, relief=tk.FLAT, bg=self.RED)
         self.red_team_frame.pack(side=tk.LEFT, padx=10, pady=5, anchor="n")
 
-        self.green_team_frame = tk.Frame(teams_frame, bd=2, relief=tk.GROOVE, bg=self.GREEN)
+        self.green_team_frame = tk.Frame(teams_frame, bd=2, relief=tk.FLAT, bg=self.GREEN)
         self.green_team_frame.pack(side=tk.LEFT, padx=10, pady=5, anchor="n")
 
         # Create labels for the Red and Green Teams
-        red_team_label = tk.Label(self.red_team_frame, text="RED TEAM", font=("Helvetica", 16), bg=self.RED, fg=self.WHITE)
+        red_team_label = tk.Label(self.red_team_frame, text="RED TEAM", font=("Silom", 24), bg=self.RED, fg=self.WHITE)
         red_team_label.pack()
 
-        green_team_label = tk.Label(self.green_team_frame, text="GREEN TEAM", font=("Helvetica", 16), bg=self.GREEN, fg=self.WHITE)
+        green_team_label = tk.Label(self.green_team_frame, text="GREEN TEAM", font=("Silom", 24), bg=self.GREEN, fg=self.WHITE)
         green_team_label.pack()
 
         # Create frames for the tables of the Red and Green Teams
@@ -72,23 +72,23 @@ class EntryScreen(tk.Frame):
         self.green_table_frame.pack()
 
         # Create 15x2 tables with Entry widgets and row numbers for the Red Team
-        column1_label_red = tk.Label(self.red_table_frame, text="Unique ID", font=("Helvetica", 15), width=8, anchor="w", bg=self.RED, fg=self.WHITE)
+        column1_label_red = tk.Label(self.red_table_frame, text="Unique ID", font=("Silom", 15), width=8, anchor="w", bg=self.RED, fg=self.WHITE)
         column1_label_red.grid(row=0, column=1, padx=(5, 0), pady=5)
 
-        column2_label_red = tk.Label(self.red_table_frame, text="Codename", font=("Helvetica", 15), width=8, anchor="w", bg=self.RED, fg=self.WHITE)
+        column2_label_red = tk.Label(self.red_table_frame, text="Codename", font=("Silom", 15), width=8, anchor="w", bg=self.RED, fg=self.WHITE)
         column2_label_red.grid(row=0, column=2, padx=(5, 0), pady=5)
 
-        column2_label_red = tk.Label(self.red_table_frame, text="Equipment ID", font=("Helvetica", 15), width=11, anchor="w", bg=self.RED, fg=self.WHITE)
+        column2_label_red = tk.Label(self.red_table_frame, text="Equipment ID", font=("Silom", 15), width=11, anchor="w", bg=self.RED, fg=self.WHITE)
         column2_label_red.grid(row=0, column=3, padx=(5, 0), pady=5)
 
         self.entries_red = []
         for i in range(1, self.TEAM_SIZE + 1):
-            row_label = tk.Label(self.red_table_frame, text=f"{i}.", font = ("Helvetica", 15), width=3, anchor="w", bg=self.RED, fg=self.WHITE)
+            row_label = tk.Label(self.red_table_frame, text=f"{i}.", font = ("Silom", 15), width=3, anchor="w", bg=self.RED, fg=self.WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
             row_entries = []
             for j in range(1, 4):
-                entry = tk.Entry(self.red_table_frame, font=("Helvetica", 15), width=20, bg=self.WHITE, fg="black")
+                entry = tk.Entry(self.red_table_frame, font=("Silom", 15), width=15, bg=self.WHITE, fg="black")
                 entry.grid(row=i, column=j, padx=5, pady=3)
                 entry.bind("<FocusOut>", lambda event, row=i, col=j, entry=entry: self.on_entry_change(event, row, col, entry, 'red'))
                 row_entries.append(entry)
@@ -97,24 +97,24 @@ class EntryScreen(tk.Frame):
         # Center the Red Team table
         self.red_table_frame.pack(side=tk.TOP, pady=5)
 
-        column1_label_green = tk.Label(self.green_table_frame, text="Unique ID", font=("Helvetica", 15), width=8, anchor="w", bg=self.GREEN, fg=self.WHITE)
+        column1_label_green = tk.Label(self.green_table_frame, text="Unique ID", font=("Silom", 15), width=8, anchor="w", bg=self.GREEN, fg=self.WHITE)
         column1_label_green.grid(row=0, column=1, padx=(5, 0), pady=5)
 
-        column2_label_green = tk.Label(self.green_table_frame, text="Codename", font=("Helvetica", 15), width=8, anchor="w", bg=self.GREEN, fg=self.WHITE)
+        column2_label_green = tk.Label(self.green_table_frame, text="Codename", font=("Silom", 15), width=8, anchor="w", bg=self.GREEN, fg=self.WHITE)
         column2_label_green.grid(row=0, column=2, padx=(5, 0), pady=5)
 
-        column3_label_green = tk.Label(self.green_table_frame, text="Equipment ID", font=("Helvetica", 15), width=11, anchor="w", bg=self.GREEN, fg=self.WHITE)
+        column3_label_green = tk.Label(self.green_table_frame, text="Equipment ID", font=("Silom", 15), width=11, anchor="w", bg=self.GREEN, fg=self.WHITE)
         column3_label_green.grid(row=0, column=3, padx=(5, 0), pady=5)
 
         # Create 15x3 tables with Entry widgets and row numbers for the Green Team
         self.entries_green = []
         for i in range(1, self.TEAM_SIZE + 1):
-            row_label = tk.Label(self.green_table_frame, text=f"{i}.", font = ("Helvetica", 15), width=3, anchor="w", bg=self.GREEN, fg=self.WHITE)
+            row_label = tk.Label(self.green_table_frame, text=f"{i}.", font = ("Silom", 15), width=3, anchor="w", bg=self.GREEN, fg=self.WHITE)
             row_label.grid(row=i, column=0, padx=(5, 0), pady=5)
 
             row_entries = []
             for j in range(1, 4):
-                entry = tk.Entry(self.green_table_frame, font=("Helvetica", 15), width=20, bg=self.WHITE, fg="black")
+                entry = tk.Entry(self.green_table_frame, font=("Silom", 15), width=15, bg=self.WHITE, fg="black")
                 entry.grid(row=i, column=j, padx=5, pady=3)
                 entry.bind("<FocusOut>", lambda event, row=i, col=j, entry=entry: self.on_entry_change(event, row, col, entry, 'green'))
                 row_entries.append(entry)
@@ -122,12 +122,6 @@ class EntryScreen(tk.Frame):
 
         # Center the Green Team table
         self.green_table_frame.pack(side=tk.TOP, pady=5)
-
-    def on_button_click(self, button_number):
-        if button_number == 5:
-            self.start_game()
-        elif button_number == 8:
-            self.clear_entries()
             
     def on_key_press(self, event):
         # Check if the pressed key is a function key (F1, F2, ..., F8)
@@ -247,6 +241,10 @@ class EntryScreen(tk.Frame):
     def close_popup(self):
         if hasattr(self, "popup_frame") and self.popup_frame:
             self.popup_frame.destroy()
+
+    def quit(self):
+        print("in quit")
+        self.controller.quit()
 
     def on_show(self):
         pass

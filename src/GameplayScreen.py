@@ -3,16 +3,15 @@ import random
 import pygame
 import os
 from tkinter.font import Font
-from Player import Player
 from Stage import Stage
 
 class GameplayScreen(tk.Frame):
     # Hex codes for colors
     PURPLE = '#4f62c4'
-    RED = '#450c19'
-    GREEN = '#093b15'
+    RED = '#ad1c3d'
+    GREEN = '#169c36'
     GRAY = "#222222"
-    WHITE = "#d9d9d9"
+    WHITE = "#ededed"
     HIT_STREAM_MAX = 5
     GREEN_TEAM_CODE = 43
     RED_TEAM_CODE  = 53
@@ -32,9 +31,9 @@ class GameplayScreen(tk.Frame):
         self.flash_color = self.WHITE # sets flash color for text
         parent.bind_all('q', self.game_over_popup)
 
-        self.HEADER_FONT = Font(self.controller, family='Helvetica', size=48, weight='bold')
-        self.PLAYER_FONT = Font(self.controller, family='Helvetica', size=24, weight='bold')
-        self.SCORE_FONT = Font(self.controller, family='Helvetica', size=24)
+        self.HEADER_FONT = Font(self.controller, family='Silom', size=48, weight='bold')
+        self.PLAYER_FONT = Font(self.controller, family='Silom', size=24, weight='bold')
+        self.SCORE_FONT = Font(self.controller, family='Silom', size=24)
 
         self.grid_columnconfigure(0, weight=1)
         # row for team scores w/ header
@@ -153,10 +152,12 @@ class GameplayScreen(tk.Frame):
     # add a hit message to hit stream
     def add_hit(self, fired, hit):
         message = fired.name + " hit " + hit.name
+        fired_name_length = len(fired.name)
+        hit_name_length = len(hit.name)
         hit_text = tk.Text(self.hit_stream_frame, bg=self.WHITE, fg=self.GRAY, font=self.PLAYER_FONT, width=1, height=1, highlightthickness=0)
         hit_text.insert(tk.INSERT, message)
-        hit_text.tag_add('p1', '1.0', '1.0 wordend')
-        hit_text.tag_add('p2', 'end -2 chars wordstart', tk.END)
+        hit_text.tag_add('p1', '1.0', ('1.' + str(fired_name_length)))
+        hit_text.tag_add('p2', ('end -' + str(hit_name_length+1) + ' chars'), tk.END)
         if fired.team == 'red':
             hit_text.tag_config('p1', foreground=self.RED)
         else:
@@ -178,10 +179,12 @@ class GameplayScreen(tk.Frame):
         else:
             base_name = "GREEN BASE"
         message = fired.name + " hit the " + base_name
+        player_name_length = len(fired.name)
+        base_name_length = (len(base_name))
         hit_text = tk.Text(self.hit_stream_frame, bg=self.WHITE, fg=self.GRAY, font=self.PLAYER_FONT, width=1, height=1, highlightthickness=0)
         hit_text.insert(tk.INSERT, message)
-        hit_text.tag_add('p1', '1.0', '1.0 wordend')
-        hit_text.tag_add('base', 'end -2 chars wordstart', tk.END)
+        hit_text.tag_add('p1', '1.0', ('1.' + str(player_name_length)))
+        hit_text.tag_add('base', ('end -' + str(base_name_length+1) + ' chars'), tk.END)
         if fired.team == 'red':
             hit_text.tag_config('p1', foreground=self.RED)
             hit_text.tag_config('base', foreground=self.GREEN)

@@ -4,7 +4,6 @@
 # strother's udp: https://github.com/jstrother123/photon-main/tree/main/udp_files
 
 import socket
-from Stage import Stage
 
 class NetworkingManager():
     BROADCAST_PORT = 7500

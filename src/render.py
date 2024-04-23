@@ -17,6 +17,7 @@ class RenderingManager(tk.Tk):
         SCREEN_WIDTH = self.winfo_screenwidth()               
         SCREEN_HEIGHT = self.winfo_screenheight()               
         self.geometry("%dx%d" % (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.attributes("-fullscreen", True)
 
         # creating a frame and assigning it to container
         container = tk.Frame(self, height=SCREEN_HEIGHT, width=SCREEN_WIDTH)
@@ -64,6 +65,10 @@ class RenderingManager(tk.Tk):
 
     def set_model_teams(self, green_team, red_team):
         self.gameplayModel.set_teams(green_team, red_team)
+
+    def quit(self):
+        self.gameplayModel.set_game_state(Stage.PROGRAM_QUIT)
+        self.destroy()
 
     def tick(self):
         # do actual rendering here.
