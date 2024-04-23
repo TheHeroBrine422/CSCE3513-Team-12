@@ -305,7 +305,7 @@ class GameplayScreen(tk.Frame):
         label = tk.Label(self.popup_frame, text="Game Over!", font=self.HEADER_FONT, bg=self.WHITE, fg=self.RED)
         label.pack(pady=20)
 
-        btn_quit = tk.Button(self.popup_frame, text="Quit", command=self.quit_to_entry_screen, font=self.SCORE_FONT, bg=self.RED, fg=self.WHITE)
+        btn_quit = tk.Button(self.popup_frame, text="Quit", command=self.quit_to_entry_screen, font=self.SCORE_FONT, bg=self.WHITE, fg=self.RED)
         btn_quit.pack(pady=10)
     
     def quit_to_entry_screen(self):
