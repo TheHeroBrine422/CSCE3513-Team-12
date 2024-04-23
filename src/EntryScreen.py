@@ -127,7 +127,15 @@ class EntryScreen(tk.Frame):
         # Check if the pressed key is a function key (F1, F2, ..., F8)
         if event.keysym.startswith("F") and event.keysym[1:].isdigit():
             button_number = int(event.keysym[1:])
-            self.on_button_click(button_number)
+            if button_number == 1:
+                print('bye')
+                self.quit()
+            elif button_number == 5:
+                print('begin')
+                self.start_game()
+            elif button_number == 8:
+                print('begone')
+                self.clear_entries()
 
     # Function to handle changes in the Entry widgets
     def on_entry_change(self, event, row, col, entry, team):
@@ -232,10 +240,10 @@ class EntryScreen(tk.Frame):
         self.popup_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         error_msg = "There was an error filling out the teams. Please make sure all players have all entries filled."
-        label = tk.Label(self.popup_frame, text=error_msg, font=('Silom', 14), bg=self.WHITE, fg=self.RED)
+        label = tk.Label(self.popup_frame, text=error_msg, bg=self.WHITE, fg=self.RED)
         label.pack(pady=20)
 
-        btn_quit = tk.Button(self.popup_frame, text="Return to Player Entry", font=('Silom', 14), command=self.close_popup, bg=self.WHITE, fg=self.RED)
+        btn_quit = tk.Button(self.popup_frame, text="Return to Player Entry", command=self.close_popup, bg=self.WHITE, fg=self.RED)
         btn_quit.pack(pady=10)
 
     def close_popup(self):
