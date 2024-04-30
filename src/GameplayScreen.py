@@ -296,17 +296,19 @@ class GameplayScreen(tk.Frame):
 
     # Function to display the "Game Over" popup
     def game_over_popup(self, event = None):
-        if hasattr(self, "popup_frame") and self.popup_frame:
-            self.popup_frame.destroy()
-        self.model.end_game()
-        self.popup_frame = tk.Frame(self, bg=self.WHITE, bd=5, relief=tk.SOLID, highlightbackground="yellow", highlightthickness=5)
-        self.popup_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        active_frame = self.controller.get_active_frame()
+        if active_frame is self:
+            if hasattr(self, "popup_frame") and self.popup_frame:
+                self.popup_frame.destroy()
+            self.model.end_game()
+            self.popup_frame = tk.Frame(self, bg=self.WHITE, bd=5, relief=tk.SOLID, highlightbackground="yellow", highlightthickness=5)
+            self.popup_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-        label = tk.Label(self.popup_frame, text="Game Over!", font=self.HEADER_FONT, bg=self.WHITE, fg=self.RED)
-        label.pack(pady=20)
+            label = tk.Label(self.popup_frame, text="Game Over!", font=self.HEADER_FONT, bg=self.WHITE, fg=self.RED)
+            label.pack(pady=20)
 
-        btn_quit = tk.Button(self.popup_frame, text="Quit", command=self.quit_to_entry_screen, font=self.SCORE_FONT, bg=self.WHITE, fg=self.RED)
-        btn_quit.pack(pady=10)
+            btn_quit = tk.Button(self.popup_frame, text="Quit", command=self.quit_to_entry_screen, font=self.SCORE_FONT, bg=self.RED, fg=self.WHITE)
+            btn_quit.pack(pady=10)
     
     def quit_to_entry_screen(self):
         if hasattr(self, "popup_frame") and self.popup_frame:

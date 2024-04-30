@@ -27,12 +27,7 @@ class EntryScreen(tk.Frame):
         buttons = []
         labels = [
             "Quit Program",
-            "",
-            "",
-            "",
             "Start Game",
-            "",
-            "",
             "Clear Players"
         ]
         for i, label in enumerate(labels, start=1):
@@ -44,8 +39,8 @@ class EntryScreen(tk.Frame):
         # Bind all key events globally
         self.master.bind_all("<KeyPress>", self.on_key_press)
         buttons[0].config(command=self.quit)
-        buttons[4].config(command=self.start_game)
-        buttons[7].config(command=self.clear_entries)
+        buttons[1].config(command=self.start_game)
+        buttons[2].config(command=self.clear_entries)
 
         # Create frames for the Red and Green Teams, encapsulate them in another frame
         teams_frame = tk.Frame(self, bg=self.GRAY)
@@ -130,10 +125,10 @@ class EntryScreen(tk.Frame):
             if button_number == 1:
                 print('bye')
                 self.quit()
-            elif button_number == 5:
+            elif button_number == 2:
                 print('begin')
                 self.start_game()
-            elif button_number == 8:
+            elif button_number == 3:
                 print('begone')
                 self.clear_entries()
 

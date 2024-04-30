@@ -53,6 +53,11 @@ class RenderingManager(tk.Tk):
         # raises the current frame to the top
         frame.tkraise()
         frame.on_show()
+        self.current_frame_name = cont
+    
+    def get_active_frame(self):
+        # Return the currently active frame
+        return self.frames[self.current_frame_name] if self.current_frame_name in self.frames else None
 
     def start_game(self):
         if hasattr(self.frames["GameplayScreen"], "popup_frame") and self.frames["GameplayScreen"].popup_frame:
